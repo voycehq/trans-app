@@ -1,9 +1,18 @@
+from sqlalchemy.ext.declarative import declarative_base
+
+Base_Model = declarative_base()
+
+from app.models import *
+
+
 def create_app():
     from logging.config import dictConfig
     from fastapi.responses import JSONResponse
     from fastapi import FastAPI, status, Request
+    from fastapi.staticfiles import StaticFiles
     from app.config.logger import LogConfig
     from config import config
+    from app.utils.connection import engine
 
     dictConfig(LogConfig().dict())
     debug: bool = config.ENV != 'PROD'
@@ -22,6 +31,7 @@ def create_app():
     )
     main_app.add_middleware(RawContextMiddleware, plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()))
     main_app.middleware('http')(catch_all_exceptions)
+    main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     # Routes
 
@@ -48,5 +58,7 @@ def create_app():
             status_code=exc.status,
             content={"statusCode": exc.status, "message": exc.error}
         )
+
+    Base_Model.metadata.create_all(bind=engine)
 
     return main_app
