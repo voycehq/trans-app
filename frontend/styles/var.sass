@@ -1,0 +1,26 @@
+$primary-color: #012b65
+$secondary-color: #005399
+$white-color: #fff
+$text-color: #70757a
+$black-color: #000
+
+$border: 1px solid #dadce0
+$shadow: 0px 0.1875rem 0.0625rem -0.125rem rgba(0, 0, 0, 0.2),0px 0.125rem 0.125rem 0px rgba(0, 0, 0, 0.14),0px 0.0625rem 0.3125rem 0px rgba(0, 0, 0, 0.1)
+$box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px
+
+$font-family: 'Google Sans', sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif
+
+@function rem($value)
+	$result: calc($value / 16px) + 0rem
+	@return $result
+
+@mixin buttonStyle()
+	display: block
+	color: $white-color
+	padding: rem(12px) rem(24px)
+	border-radius: rem(8px)
+	font-size: rem(16px)
+	white-space: nowrap
+	font-weight: 400
+	&:hover
+		background-color: $primary-color
