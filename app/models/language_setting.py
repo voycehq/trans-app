@@ -1,12 +1,11 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, DateTime, ForeignKey
-from sqlalchemy.dialects.mysql import JSON
-
 from app import Base_Model
 
 
 class LanguageSetting(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, DateTime, ForeignKey
+    from sqlalchemy.dialects.mysql import JSON
+
     __tablename__: str = "language_setting"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

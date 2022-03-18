@@ -1,11 +1,9 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime
-
 from app import Base_Model
 
 
 class WorkspaceRole(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, String, DateTime
 
     __tablename__: str = "workspace_role"
 

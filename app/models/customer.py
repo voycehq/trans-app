@@ -1,12 +1,11 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship, backref
-
 from app import Base_Model
 
 
 class Customer(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+    from sqlalchemy.orm import relationship, backref
+
     __tablename__: str = "customer"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

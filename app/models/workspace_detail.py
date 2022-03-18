@@ -1,11 +1,9 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, ForeignKey, DateTime
-
 from app import Base_Model
 
 
 class WorkspaceDetail(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, ForeignKey, DateTime
 
     __tablename__: str = "workspace_detail"
 

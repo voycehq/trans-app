@@ -1,12 +1,11 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import backref, relationship
-
 from app import Base_Model
 
 
 class Workspace(Base_Model):
+    from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+    from sqlalchemy.orm import backref, relationship
+    from datetime import datetime
+
     __tablename__: str = "workspace"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

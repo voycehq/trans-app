@@ -1,11 +1,9 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-
 from app import Base_Model
 
 
 class Language(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 
     __tablename__: str = "language"
 

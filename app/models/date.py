@@ -1,11 +1,9 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
-
 from app import Base_Model
 
 
 class Date(Base_Model):
+    from datetime import datetime
+    from sqlalchemy import Column, Integer, String, DateTime, Boolean
 
     __tablename__: str = "date"
 

@@ -1,7 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
 
-from app.utils.connection import engine
-
 Base_Model = declarative_base()
 
 from app.models import *
@@ -13,6 +11,7 @@ def create_app():
     from fastapi import FastAPI, status, Request
     from app.config.logger import LogConfig
     from config import config
+    from app.utils.connection import engine
 
     dictConfig(LogConfig().dict())
     debug: bool = config.ENV != 'PROD'
