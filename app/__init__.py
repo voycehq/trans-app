@@ -9,6 +9,7 @@ def create_app():
     from logging.config import dictConfig
     from fastapi.responses import JSONResponse
     from fastapi import FastAPI, status, Request
+    from fastapi.staticfiles import StaticFiles
     from app.config.logger import LogConfig
     from config import config
     from app.utils.connection import engine
@@ -30,6 +31,7 @@ def create_app():
     )
     main_app.add_middleware(RawContextMiddleware, plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()))
     main_app.middleware('http')(catch_all_exceptions)
+    main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     # Routes
 
