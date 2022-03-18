@@ -1,3 +1,12 @@
+from sqlalchemy.ext.declarative import declarative_base
+
+from app.utils.connection import engine
+
+Base_Model = declarative_base()
+
+from app.models import *
+
+
 def create_app():
     from logging.config import dictConfig
     from fastapi.responses import JSONResponse
@@ -48,5 +57,7 @@ def create_app():
             status_code=exc.status,
             content={"statusCode": exc.status, "message": exc.error}
         )
+
+    Base_Model.metadata.create_all(bind=engine)
 
     return main_app
