@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "../components/Logo";
 
 import style from "../styles/pages/Index.module.sass";
 
@@ -9,7 +10,7 @@ const Home: NextPage = () => {
     <div>
       <nav className={style.nav}>
         <div className={style.logo}>
-          <h1>Voyce</h1>
+          <Logo />
         </div>
 
         <ul className={style.links}>
