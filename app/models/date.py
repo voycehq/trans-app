@@ -22,7 +22,7 @@ class Date(Base_Model):
     day_name = Column(String(100), nullable=False)
     is_working_day = Column(Boolean, nullable=False)
     quarter = Column(Integer, nullable=False)
-    Year_half = Column(Integer, nullable=False)
+    year_half = Column(Integer, nullable=False)
 
     created_on = Column(DateTime, default=datetime.utcnow())
     updated_on = Column(DateTime, onupdate=datetime.utcnow())
