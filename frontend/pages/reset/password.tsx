@@ -2,18 +2,17 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { FormEvent, useRef, useState } from "react";
 
-import { InputEmail, InputPassword, InputText } from "../components/Inputs";
-import Logo from "../components/Logo";
-import Spinner from "../components/Spinner";
-import style from "../styles/pages/Login.module.sass";
+import { InputEmail, InputPassword, InputText } from "../../components/Inputs";
+import Logo from "../../components/Logo";
+import Spinner from "../../components/Spinner";
+import style from "../../styles/pages/Login.module.sass";
 
 const Signup: NextPage = () => {
   const inputTextRef = useRef<HTMLInputElement>(null);
   const s: any = { width: "100%", marginBottom: "20px" };
   const [state, setState] = useState({
-    email: "",
     password: "",
-    full_name: "",
+    code: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -35,33 +34,27 @@ const Signup: NextPage = () => {
         </header>
         <form className={style.form} onSubmit={onSubmit}>
           <header>
-            <h2>Sign up</h2>
-            <p>One account across all workspaces.</p>
+            <h2>Password Reset</h2>
+            <p>
+              Enter the code sent to your email <br /> and a new password to
+              reset your account password.
+            </p>
           </header>
 
           <div>
             <InputText
               height={50}
               s={s}
-              label="Full name"
+              label="Code"
               inputRef={inputTextRef}
               onChange={onChange}
-              id="full_name"
-              value={state.full_name}
-            />
-            <InputEmail
-              height={50}
-              s={s}
-              label="Email"
-              inputRef={inputTextRef}
-              onChange={onChange}
-              id="email"
-              value={state.email}
+              id="code"
+              value={state.code}
             />
             <InputPassword
               height={50}
               s={s}
-              label="Password"
+              label="New Password"
               onChange={onChange}
               id="password"
               value={state.password}
@@ -74,17 +67,14 @@ const Signup: NextPage = () => {
 
             <button type={loading ? "button" : "submit"}>
               {loading && <Spinner visible bgColor="#fff" />}
-              {!loading && <span>Sign up now</span>}
+              {!loading && <span>Reset password</span>}
             </button>
           </footer>
         </form>
 
-        <footer className={style.footer} style={{ marginTop: "2rem" }}>
+        <footer className={style.footer} style={{ marginLeft: "0" }}>
           <p>
-            Already have an account?{" "}
-            <Link href="/login">
-              <a>Sign in here</a>
-            </Link>
+            Voyce advice! <br /> Try not to forget your password again. -:)
           </p>
         </footer>
       </div>
