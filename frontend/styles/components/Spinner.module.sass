@@ -1,0 +1,30 @@
+@use '../var'
+
+.spinner
+	margin: 0 auto
+
+.loader
+	font-size: 0.1875rem
+	position: relative
+	text-indent: -9999em
+	border: var.$border
+	border-width: 1.1em
+	border-color: rgba(0, 0, 0, 0.2)
+	border-left-color: var.$primary-color
+	border-radius: 50%
+	height: 1rem
+	width: 1rem
+
+	transform: translateZ(0)
+	animation: load8 400ms infinite linear
+	&::after
+		border-radius: 50%
+		width: 10em
+		height: 10em
+
+		@keyframes load8
+			0%
+				transform: rotate(0deg)
+
+			100%
+				transform: rotate(360deg)

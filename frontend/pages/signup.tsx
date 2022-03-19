@@ -2,14 +2,18 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { FormEvent, useRef, useState } from "react";
 
-import { InputEmail, InputPassword } from "../components/Inputs";
+import { InputEmail, InputPassword, InputText } from "../components/Inputs";
 import Spinner from "../components/Spinner";
 import style from "../styles/pages/Login.module.sass";
 
-const Login: NextPage = () => {
+const Signup: NextPage = () => {
   const inputTextRef = useRef<HTMLInputElement>(null);
   const s: any = { width: "100%", marginBottom: "20px" };
-  const [state, setState] = useState({ email: "", password: "" });
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    full_name: "",
+  });
   const [loading, setLoading] = useState(false);
 
   const onChange = ({ target: { id, value } }: any) =>
@@ -30,11 +34,20 @@ const Login: NextPage = () => {
         </header>
         <form className={style.form} onSubmit={onSubmit}>
           <header>
-            <h2>Sign in</h2>
+            <h2>Sign up</h2>
             <p>One account across all workspaces.</p>
           </header>
 
           <div>
+            <InputText
+              height={50}
+              s={s}
+              label="Full name"
+              inputRef={inputTextRef}
+              onChange={onChange}
+              id="full_name"
+              value={state.full_name}
+            />
             <InputEmail
               height={50}
               s={s}
@@ -55,21 +68,21 @@ const Login: NextPage = () => {
           </div>
 
           <footer>
-            <Link href="/">
-              <a>Forgot Password</a>
-            </Link>
+            {/* Checkbox about agreement to privacy policy */}
+            <span></span>
+
             <button type={loading ? "button" : "submit"}>
               {loading && <Spinner visible bgColor="#fff" />}
-              {!loading && <span>Sign in</span>}
+              {!loading && <span>Sign up now</span>}
             </button>
           </footer>
         </form>
 
-        <footer className={style.footer}>
+        <footer className={style.footer} style={{ marginTop: "2rem" }}>
           <p>
-            Don&apos;t have an account?{" "}
-            <Link href="/signup">
-              <a>Sign up here</a>
+            Already have an account?{" "}
+            <Link href="/login">
+              <a>Sign in here</a>
             </Link>
           </p>
         </footer>
@@ -78,4 +91,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default Signup;
