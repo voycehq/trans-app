@@ -93,15 +93,13 @@ class DateLib:
 
         start_year = datetime.utcnow().year
         if DateLib.check_present_year(year=start_year):
-            logger.info("Dates for this Year already Exist")
             return
-        stop_year = start_year + 5
 
+        stop_year = start_year + 5
         dates: list = self.__create_dates__(start_year, stop_year)
-        logger.info(f"Creating dates between {start_year} and {stop_year}")
 
         DateLib.bulk_create(records=dates)
-
+        logger.info(f"Done Creating dates From {start_year}-01-01 to {stop_year}-12-31")
         return
 
     @staticmethod
