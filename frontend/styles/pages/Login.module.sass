@@ -1,0 +1,77 @@
+@use '../var'
+
+.main
+	min-height: 100vh
+	min-width: 100vw
+	display: flex
+	justify-content: center
+	align-items: center
+	@media only screen and (max-width: var.rem(900px))
+		min-height: 100%
+		min-width: 100%
+
+.main__wrapper
+	min-width: 31.25rem
+	min-height: 35.625rem
+	padding: 2.5rem
+	border: var.$border
+	border-radius: var.rem(10px)
+	display: flex
+	flex-direction: column
+	@media only screen and (max-width: var.rem(900px))
+		border: none
+		margin-top: 2rem
+
+	@media only screen and (max-width: var.rem(500px))
+		min-width: 100%
+		padding: 1.5rem
+
+.header
+	text-align: center
+	margin-bottom: 1rem
+
+.form
+	display: flex
+	flex-direction: column
+	gap: 2rem
+
+	header
+		border-top: var.$border
+		border-bottom: var.$border
+		padding: 1rem
+
+	footer
+		display: flex
+		justify-content: space-between
+		gap: 1rem
+		flex-wrap: wrap
+		button
+			@include var.buttonStyle()
+			padding: var.rem(9px) var.rem(20px)
+			background-color: var.$primary-color
+			&:hover
+				background-color: var.$secondary-color
+
+		a
+			color: var.$primary-color
+			display: flex
+			justify-content: center
+			align-items: center
+			padding: var.rem(9px) var.rem(20px)
+			border-radius: var.rem(10px)
+			border: var.$border
+			border-color: transparent
+			&:hover
+				border: var.$border
+				background-color: var.$hover-color
+
+.footer
+	margin: auto
+	margin-bottom: 0
+	p a
+		color: var.$primary-color
+		&:hover
+			text-decoration: underline
+
+	@media only screen and (max-width: var.rem(500px))
+		margin-top: 2rem

@@ -1,0 +1,25 @@
+@use '../var'
+
+@mixin iconStyle
+	background-color: var.$white-color
+	width: var.rem(35px)
+	height: var.rem(35px)
+	border-radius: 50%
+	display: flex
+	justify-content: center
+	align-items: center
+	&:hover
+		background-color: var.$hover-color
+		cursor: pointer
+
+.icon__button
+	@include iconStyle
+
+.password__visibility
+	position: absolute
+	right: 0
+	top: 50%
+	transform: translateY(-57%)
+	margin-right: 8px
+	@include iconStyle
+	background-color: transparent

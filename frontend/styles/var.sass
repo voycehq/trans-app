@@ -3,6 +3,8 @@ $secondary-color: #005399
 $white-color: #fff
 $text-color: #70757a
 $black-color: #000
+$hover-color: #f8f8f8
+$icon-color: #64676c
 
 $border: 1px solid #dadce0
 $shadow: 0px 0.1875rem 0.0625rem -0.125rem rgba(0, 0, 0, 0.2),0px 0.125rem 0.125rem 0px rgba(0, 0, 0, 0.14),0px 0.0625rem 0.3125rem 0px rgba(0, 0, 0, 0.1)
@@ -15,6 +17,8 @@ $font-family: 'Google Sans', sans-serif, -apple-system, BlinkMacSystemFont, Sego
 	@return $result
 
 @mixin buttonStyle()
+	border: none
+	outline: none
 	display: block
 	color: $white-color
 	padding: rem(12px) rem(24px)
@@ -24,6 +28,7 @@ $font-family: 'Google Sans', sans-serif, -apple-system, BlinkMacSystemFont, Sego
 	font-weight: 400
 	&:hover
 		background-color: $primary-color
+		cursor: pointer
 
 @mixin middleLine()
 	content: ""
