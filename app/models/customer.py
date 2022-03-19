@@ -25,11 +25,9 @@ class Customer(Base_Model):
                              backref=backref("workspace",
                                              lazy="joined",
                                              single_parent=True,
-                                             passive_deletes=True))
-    workspace_detail = relationship("WorkspaceDetail",
-                                    backref=backref("workspace_detail",
+                                             passive_deletes=True,
+                                             overlaps="workspace,workspace"))
+    workspace_details = relationship("WorkspaceDetail",
+                                    backref=backref("workspace_details",
                                                     lazy="joined"))
 
-    text = relationship("OriginalText",
-                        backref=backref("workspace_detail",
-                                                lazy="joined"))

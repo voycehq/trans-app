@@ -19,7 +19,7 @@ class DateDTO(BaseModel):
     day_name: str
     is_working_day: bool
     quarter: int
-    Year_half: int
+    year_half: int
 
     created_on: datetime
     updated_on: Optional[datetime]
