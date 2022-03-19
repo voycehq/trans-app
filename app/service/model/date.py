@@ -88,17 +88,17 @@ class DateLib:
         return list(date_df.T.to_dict().values())
 
     def run(self):
-        from app.utils.print_to_console import print_to_console
+        from app.logs import logger
         from datetime import datetime
 
         start_year = datetime.utcnow().year
         if DateLib.check_present_year(year=start_year):
-            print_to_console("Dates for this Year already Exist")
+            logger.info("Dates for this Year already Exist")
             return
         stop_year = start_year + 5
 
         dates: list = self.__create_dates__(start_year, stop_year)
-        print_to_console(f"Creating dates between {start_year} and {stop_year}")
+        logger.info(f"Creating dates between {start_year} and {stop_year}")
 
         DateLib.bulk_create(records=dates)
 
