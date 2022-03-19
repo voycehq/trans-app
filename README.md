@@ -26,7 +26,7 @@ cp -b alembic.example.ini alembic.ini
 
 - Creating database migrations
 
-strikethrough textBelow are the various processes to follow through to create a db migration after we update any database schema.
+Go through the processes below to create a db migration after we update any database schema.
 
 - Synchronize migrations **heads** pointer with your local database
 
