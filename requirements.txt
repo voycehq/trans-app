@@ -2,3 +2,6 @@ fastapi==0.75.0
 uvicorn==0.17.6
 pydantic==1.9.0
 starlette-context==0.3.3
+SQLAlchemy==1.4.32
+mysqlclient==2.1.0
+alembic==1.7.7
