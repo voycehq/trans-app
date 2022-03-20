@@ -116,3 +116,15 @@ class DateLib:
         from app.models.date import Date
 
         return True if db.query(Date).filter_by(year=year).first() else False
+
+    @staticmethod
+    @session_hook
+    def get_current_day_from_record(db: Session):
+        from datetime import datetime
+        from app.models.date import Date
+
+        full_date = datetime.utcnow().date()
+
+        record = db.query(Date).filter_by(full_date=full_date).first()
+
+        return record if record else None

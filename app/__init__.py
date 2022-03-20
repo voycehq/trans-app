@@ -34,6 +34,9 @@ def create_app():
     main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     # Routes
+    from app.controller.auth import signup
+
+    main_app.include_router(signup.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError
