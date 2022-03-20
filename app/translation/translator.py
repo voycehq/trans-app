@@ -17,15 +17,15 @@ class TranslateScript:
         self.input_script: str = input_script
         self.target_lang_code = target_lang_code
 
-        # * Run after init function for validations
-        self.__after_init__()
-
         # * Constants
         self.__LANGUAGE_DATABASE = {
             'en': {'code': 'en', 'htmlCode': 'translator-lang-option-en-US'},
             'fr': {'code': 'fr', 'htmlCode': 'translator-lang-option-fr-FR'},
             'es': {'code': 'es', 'htmlCode': 'translator-lang-option-es-ES'},
         }
+
+        # * Run after init function for validations
+        self.__after_init__()
 
     def __after_init__(self) -> None:
         """
@@ -55,7 +55,7 @@ class TranslateScript:
         if self.target_lang_code not in self.__LANGUAGE_DATABASE.keys():
             raise Exception('The target language code is incorrect')
 
-    def __configure_chrome_driver__() -> webdriver:
+    def __configure_chrome_driver__(self) -> webdriver:
         from selenium.webdriver.chrome.service import Service
         from webdriver_manager.chrome import ChromeDriverManager
         from selenium.webdriver.chrome.options import Options
@@ -116,4 +116,5 @@ class TranslateScript:
             return translatedScript
         except Exception as e:
             logger.error(f'Error occured when translating script with target_lang_code={self.target_lang_code}: {e}')
+            logger.error('This can be due to poor internet connection.')
             return ''
