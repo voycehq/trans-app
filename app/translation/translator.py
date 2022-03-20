@@ -50,7 +50,6 @@ class TranslateScript:
 
     def __validate_target_lang_code__(self) -> None:
         # ** 1st: Ensure that the language object exist in our DB
-        print('########', self.target_lang_code, self.language_object)
         if not self.language_object or self.language_object is None:
             raise Exception('The target language code is incorrect')
 
@@ -94,13 +93,13 @@ class TranslateScript:
 
     def translate(self) -> str:
         try:
-            import time
-
             # ** Configure selenium Chrome driver
+            logger.info('Configuring webdriver for web scrapping')
             driver = self.__configure_chrome_driver__()
             driver.get(config.TRANSLATOR_URL)
             
             # ** Get root containers
+            logger.info('Start script translation')
             translationPanel = driver.find_element(by=By.ID, value='panelTranslateText')
             sourceSectionPanel = translationPanel.find_element(by=By.XPATH, value="//section[@dl-test='translator-source']")
             targetSectionPanel = translationPanel.find_element(by=By.XPATH, value="//section[@dl-test='translator-target']")
@@ -108,11 +107,16 @@ class TranslateScript:
             # ** Select target language
             self.__select_target_language__(targetSectionPanel=targetSectionPanel)
             
-            # ** Get translated script after 10 secs
-            time.sleep(10)
-            translatedScript = targetSectionPanel.find_element(by=By.ID, value='target-dummydiv').get_attribute('innerHTML')
+            # ** Input raw text for translation
+            self.__inject_raw_script_for_translation__(sourceSectionPanel=sourceSectionPanel)
             
-            return translatedScript
+            # ** Get translated script once it's ready
+            translatedScript = ''
+            while len(translatedScript.strip()) == 0:
+                translatedScript = targetSectionPanel.find_element(by=By.ID, value='target-dummydiv').get_attribute('innerHTML')
+            else:
+                logger.info('Done with script translation')
+                return translatedScript
         except Exception as e:
             logger.error(f'Error occured when translating script with target_lang_code={self.target_lang_code}: {e}')
             logger.error('This can be due to poor internet connection.')
