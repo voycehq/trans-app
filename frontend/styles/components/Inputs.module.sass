@@ -1,0 +1,120 @@
+@use '../var'
+
+.input__group
+	width: fit-content
+	margin-bottom: 30px
+	position: relative
+
+.effect
+	border: 1px solid #ccc
+	height: 40px
+	padding: 6px 8px
+	outline: none
+	width: 100%
+	background: transparent
+	border-radius: 4px
+	position: relative
+
+	& ~ span::before,
+	& ~ span::after
+		content: ""
+		position: absolute
+		top: 0
+		left: 0
+		width: 0
+		height: 2px
+		background-color: var.$secondary-color
+		transition: 0.2s
+
+	& ~ span::after
+		top: auto
+		bottom: 0
+		left: auto
+		right: 0
+
+	& ~ span::before,
+	& ~ span::after
+		content: ""
+		position: absolute
+		top: 0
+		left: 0
+		width: 2px
+		height: 0
+		background-color: var.$secondary-color
+		transition: 0.2s
+
+	& ~ span i::after
+		left: auto
+		right: 0
+		top: auto
+		bottom: 0
+
+	&:focus ~ span::before,
+	&:focus ~ span::after
+		width: 100%
+		transition: 0.2s
+
+	& ~ span::before,
+	& ~ span::after
+		content: ""
+		position: absolute
+		top: 0
+		left: 0
+		width: 0
+		height: 2px
+		background-color: var.$secondary-color
+
+	& ~ span::after
+		top: auto
+		bottom: 0
+		left: auto
+		right: 0
+
+	& ~ span i::before,
+	& ~ span i::after
+		content: ""
+		position: absolute
+		top: 0
+		left: 0
+		width: 2px
+		height: 0
+		background-color: var.$secondary-color
+		transition: 0.2s
+
+	& ~ span i::after
+		left: auto
+		right: 0
+		top: auto
+		bottom: 0
+
+	&:focus ~ span i::before,
+	&:focus ~ span i::after
+		height: 100%
+		transition: 0.2s
+
+	& ~ label
+		position: absolute
+		left: 10px
+		width: 100%
+		top: 50%
+		transform: translateY(-50%)
+		color: #aaa
+			// transition: 0.3s
+		z-index: -1
+		letter-spacing: 0.5px
+		font-size: 14px
+		transition: 0.2s
+
+	&:focus ~ label,
+	&:valid ~ label
+		top: 0%
+		left: 7px
+		font-size: 12px
+		color: var.$secondary-color
+		padding: 0 3px
+		z-index: 1
+		background-color: var.$white-color
+		width: fit-content
+
+	&:not(:focus) ~ label
+		color: #aaa
