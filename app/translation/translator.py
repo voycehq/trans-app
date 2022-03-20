@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 from app.logs import logger
+from app.dto.model.language import LanguageDTO
+from app.models.language import Language
 from config import base_dir
 from config import config
 
@@ -18,11 +20,7 @@ class TranslateScript:
         self.target_lang_code = target_lang_code
 
         # * Constants
-        self.__LANGUAGE_DATABASE = {
-            'en': {'code': 'en', 'htmlCode': 'translator-lang-option-en-US'},
-            'fr': {'code': 'fr', 'htmlCode': 'translator-lang-option-fr-FR'},
-            'es': {'code': 'es', 'htmlCode': 'translator-lang-option-es-ES'},
-        }
+        self.language_object: LanguageDTO = Language.get_by_code(code=self.target_lang_code)
 
         # * Run after init function for validations
         self.__after_init__()
@@ -52,7 +50,8 @@ class TranslateScript:
 
     def __validate_target_lang_code__(self) -> None:
         # ** 1st: Ensure that the language object exist in our DB
-        if self.target_lang_code not in self.__LANGUAGE_DATABASE.keys():
+        print('########', self.target_lang_code, self.language_object)
+        if not self.language_object or self.language_object is None:
             raise Exception('The target language code is incorrect')
 
     def __configure_chrome_driver__(self) -> webdriver:
@@ -81,7 +80,7 @@ class TranslateScript:
         targetSectionPanel.find_element(by=By.XPATH, value="//button[@dl-test='translator-target-lang-btn']").click()
         
         try:
-            target_lang = self.__LANGUAGE_DATABASE.get(self.target_lang_code).get('htmlCode')
+            target_lang = self.language_object.html_code
             targetSectionPanel.find_element(by=By.CSS_SELECTOR, value='.lmt__textarea_container').find_element(
                 by=By.XPATH, value=f"//div[@dl-test='translator-target-lang-list']").find_element(by=By.XPATH, value="//button[@dl-test='{id}']".format(id=target_lang)).click()
         except ElementClickInterceptedException:

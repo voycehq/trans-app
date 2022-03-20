@@ -8,6 +8,8 @@ class LanguageDTO(BaseModel):
     id: int
     date_id: int
     name: str
+    code: str
+    html_code: str
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
