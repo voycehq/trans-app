@@ -10,6 +10,7 @@ class FactoryConfig(BaseSettings):
     PORT: str
     ENV: str = Field(..., env='ENV')
     SQLALCHEMY_DATABASE_URL: str
+    TRANSLATOR_URL: str
 
     class Config:
         env_file = os.path.join(base_dir, '.env')
