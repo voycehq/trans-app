@@ -1,8 +1,7 @@
+from app.models import *
 from sqlalchemy.ext.declarative import declarative_base
 
 Base_Model = declarative_base()
-
-from app.models import *
 
 
 def create_app():
@@ -29,7 +28,8 @@ def create_app():
         allow_methods=["*"],
         allow_headers=["*"]
     )
-    main_app.add_middleware(RawContextMiddleware, plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()))
+    main_app.add_middleware(RawContextMiddleware, plugins=(
+        plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()))
     main_app.middleware('http')(catch_all_exceptions)
     main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
