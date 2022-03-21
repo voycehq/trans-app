@@ -38,7 +38,7 @@ def create_app():
     from app.controller.auth import email_verification
 
     main_app.include_router(signup.router)
-    # main_app.include_router(email_verification.router)
+    main_app.include_router(email_verification.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError

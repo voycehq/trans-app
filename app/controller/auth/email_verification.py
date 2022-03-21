@@ -30,4 +30,4 @@ def verify_email(data: EmailVerificationDTO = Body(...)):
     CustomerLib.set_is_verified_true(email=customer.email)
     VerificationLib.verify_code(verification_info=verification_info)
 
-    return SuccessResponse(data={})
+    return SuccessResponse(data=None).set_message("You have successfully verified your account").response()
