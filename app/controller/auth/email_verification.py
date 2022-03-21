@@ -15,8 +15,8 @@ def verify_email(data: EmailVerificationDTO = Body(...)):
     # check if email exist
     customer = CustomerLib.find_by(where={"email": data.email})
     if not customer:
-        return CustomException(error="customer with this email doesn't Exist, Try signing up",
-                               status_code=status.HTTP_400_BAD_REQUEST)
+        return SuccessResponse(data=None).set_message("customer with this email doesn't Exist, Try signing up") \
+            .set_status_code(status.HTTP_400_BAD_REQUEST).response()
 
     # check verification code
     verification_info = VerificationLib.find_by(where={"code": data.code})
@@ -24,7 +24,8 @@ def verify_email(data: EmailVerificationDTO = Body(...)):
         if customer.is_verified:
             return CustomException(error="user is already verified",
                                    status_code=status.HTTP_400_BAD_REQUEST)
-        return CustomException(error="invalid code", status_code=status.HTTP_400_BAD_REQUEST)
+        return SuccessResponse(data=None).set_message("invalid code").set_status_code(status.HTTP_400_BAD_REQUEST) \
+            .response()
 
     #
     CustomerLib.set_is_verified_true(email=customer.email)
