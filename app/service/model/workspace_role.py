@@ -5,7 +5,7 @@ from app.dto.model.workspace_role import WorkspaceRoleDTO, WorkspaceRoleDTOs
 
 
 class WorkspaceRoleLib:
-    """WorkspaceRoleLib for getting workspace role info from the database
+    """WorkspaceRoleLib for getting workspace role info into the database
 
     Args:
         No Args
@@ -16,21 +16,32 @@ class WorkspaceRoleLib:
     from app.utils.session import session_hook
 
     def __init__(self):
-        self.roles = ["admin", "reviewer"]
+        self.roles: [] = ["admin", "reviewer"]
 
     def run(self):
-        for role in self.roles:
-            WorkspaceRoleLib.create(data={"name": role})
+        from app.logs import logger
+
+        WorkspaceRoleLib.create(names=self.roles)
+        logger.info(f"Done Creating customer roles")
 
     @staticmethod
     @session_hook
-    def create(db: Session, data: dict):
-        workspace_role = WorkspaceRole(**data)
+    def create(db: Session, names: []):
+        from sqlalchemy.exc import IntegrityError
 
-        db.add(workspace_role)
-        db.flush()
+        for name in names:
+            data: dict = {"name": name}
 
-        return WorkspaceRoleDTO.from_orm(workspace_role)
+            workspace_role = WorkspaceRole(**data)
+
+            try:
+                db.add(workspace_role)
+                db.flush()
+            except IntegrityError:
+                db.rollback()
+                continue
+
+        return
 
     @staticmethod
     @session_hook
