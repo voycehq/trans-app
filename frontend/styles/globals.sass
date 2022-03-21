@@ -48,6 +48,35 @@ html
 			box-sizing: border-box
 			outline: none
 
+		.alert
+			position: relative
+			padding: 0.5rem 0.6rem
+			margin-bottom: .5rem
+			border: var.$border
+			border-radius: 0.25rem
+			width: 100%
+			text-align: center
+			font-size: pxToRem(14px)
+			cursor: pointer
+
+			&.danger
+				background-color: #f7d6d3
+				border-color: #f4c5c2
+				p
+					color: var.$danger
+
+			&.success
+				background-color: #d4edda
+				border-color: #c3e6cb
+				p
+					color: var.$success
+
+			&.warning
+				border-color: #f4c5c2
+				background-color: #ffc1071c
+				p
+					color: var.$danger
+
 		::-webkit-scrollbar-corner
 			background-clip: padding-box
 			background-color: #f5f5f5

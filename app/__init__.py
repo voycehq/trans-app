@@ -48,11 +48,13 @@ def create_app():
     @main_app.exception_handler(RequestValidationError)
     async def http_exception_handler(request, error):
         import json
+        from app.logs import logger
 
         errors = list()
         for err in json.loads(error.json()):
             errors.append({err['loc'][-1]: err['msg']})
         message = f"{list(errors[0].keys())[0]}: {list(errors[0].values())[0]}"
+        logger.error(message)
         return JSONResponse(content={'statusCode': status.HTTP_400_BAD_REQUEST, "message": message, "error": message},
                             status_code=status.HTTP_400_BAD_REQUEST)
 

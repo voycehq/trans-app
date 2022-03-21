@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/v1/auth", tags=['Auth'])
 async def signup(data: SignupDTO = Body(...)):
     from app.service.model.customer import CustomerLib
     from fastapi.encoders import jsonable_encoder
-    from app.config.success_response import SuccessResponse, CustomException
+    from app.config.success_response import SuccessResponse
     from app.logs import logger
     from app.service.email import EmailLib
     from app.service.model.verification import VerificationLib
@@ -21,7 +21,7 @@ async def signup(data: SignupDTO = Body(...)):
     if customer:
         from fastapi import status
 
-        return CustomException(error="Email already exist", status_code=status.HTTP_400_BAD_REQUEST)
+        return SuccessResponse(data=None).set_message("Email already exist").set_status_code(status.HTTP_400_BAD_REQUEST).response()
 
     # create user account (includes password hashing)
     new_customer = CustomerLib.create(data=jsonable_encoder(data))
