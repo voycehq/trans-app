@@ -41,6 +41,7 @@ def create_app():
     from app.controller.workspace import workspace
     from app.controller.auth import forgot_password
     from app.controller.auth import reset_password
+    from app.controller.workspace import get_workspace
 
     main_app.include_router(signup.router)
     main_app.include_router(email_verification.router)
@@ -49,6 +50,7 @@ def create_app():
     main_app.include_router(workspace.router)
     main_app.include_router(forgot_password.router)
     main_app.include_router(reset_password.router)
+    main_app.include_router(get_workspace.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError

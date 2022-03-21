@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 
 class WorkspaceDTO(BaseModel):
+    from app.dto.model.workspace_detail import WorkspaceDetailDTOs
     id: int
     name: str
     customer_id: int
@@ -13,6 +14,8 @@ class WorkspaceDTO(BaseModel):
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
+
+    workspace_detail: Optional[WorkspaceDetailDTOs]
 
     class Config:
         orm_mode = True
