@@ -25,7 +25,7 @@ class Bootstrap:
         from app.service.model.language import LanguageLib
         from app.logs import logger
 
-        languages = [{'name': 'English', 'code': 'en', 'html_code': 'translator-lang-option-en-US'},
+        languages = [{'name': 'English', 'code': 'en', 'html_code': "translator-lang-option-en-US"},
                      {'name': 'French', 'code': 'fr', 'html_code': 'translator-lang-option-fr-FR'},
                      {'name': 'Spanish', 'code': 'es', 'html_code': 'translator-lang-option-es-ES'}]
 

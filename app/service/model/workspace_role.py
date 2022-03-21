@@ -29,9 +29,9 @@ class WorkspaceRoleLib:
                 db.bulk_insert_mappings(WorkspaceRole, [record])
             except IntegrityError:
                 db.rollback()
-                record = WorkspaceRoleLib.find_by(where={"name": name})
+                record_to_update = WorkspaceRoleLib.update(data=record)
 
-                list_to_be_updated.append(record)
+                list_to_be_updated.append(record_to_update)
 
         if list_to_be_updated:
             db.bulk_update_mappings(WorkspaceRole, list_to_be_updated)
@@ -50,3 +50,13 @@ class WorkspaceRoleLib:
             return None
 
         return WorkspaceRoleDTOs.from_orm(record).__root__ if get_all else WorkspaceRoleDTO.from_orm(record)
+
+    @staticmethod
+    @session_hook
+    def update(db: Session, data: dict) -> WorkspaceRoleDTO:
+
+        record = db.query(WorkspaceRole).filter_by(name=data.get("name")).first()
+        for key, value in data.items():
+            record.__setattr__(key, value)
+        db.flush()
+        return WorkspaceRoleDTO.from_orm(record)
