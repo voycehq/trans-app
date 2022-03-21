@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Text, Optional, List
+from typing import Optional, List
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class VerificationDTO(BaseModel):
     id: int
     customer_id: int
     verification_type: str
-    code: str
+    code: Optional[str]
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]

@@ -1,13 +1,14 @@
+from app.dto.model.verification import VerificationDTO, VerificationDTOs
+
+
 class VerificationLib:
     from app.utils.session import session_hook
     from sqlalchemy.orm import Session
-    from app.dto.model.verification import VerificationDTO
 
     @staticmethod
     @session_hook
     def create_verification(db: Session, data: dict):
         from app.models.verification import Verification
-        from app.dto.model.verification import VerificationDTO
 
         verification = Verification(**data)
 
@@ -18,8 +19,18 @@ class VerificationLib:
 
     @staticmethod
     @session_hook
+    def update(db: Session, data: dict) -> VerificationDTO:
+        from app.models.verification import Verification
+
+        record = db.query(Verification).filter_by(customer_id=data.get("customer_id")).first()
+        for key, value in data.items():
+            record.__setattr__(key, value)
+        db.flush()
+        return VerificationDTO.from_orm(record)
+
+    @staticmethod
+    @session_hook
     def find_by(db: Session, where: dict, get_all: bool = False):
-        from app.dto.model.verification import VerificationDTOs, VerificationDTO
         from app.models.verification import Verification
 
         record = db.query(Verification).filter_by(**where)

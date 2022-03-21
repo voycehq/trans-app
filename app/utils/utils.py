@@ -1,3 +1,6 @@
+from uuid import UUID
+
+
 class Utils:
 
     @staticmethod
@@ -20,11 +23,16 @@ class Utils:
         return context.hash(string)
 
     @staticmethod
-    def verify_hash(password: str, hashed_password: str):
+    def verify_hash(password: str, hashed_password: str) -> bool:
         from passlib.context import CryptContext
 
         context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
         return context.verify(password, hashed_password)
+
+    @staticmethod
+    def generate_api_key() -> str:
+        from uuid import uuid4
+        return str(uuid4())
 
 

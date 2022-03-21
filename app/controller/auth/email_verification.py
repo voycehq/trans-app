@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Body
 
-from app.dto.auth.auth import EmailVerificationDTO
+from app.dto.controller.auth import EmailVerificationDTO
 
-router = APIRouter(prefix="/api/v1/auth")
+router = APIRouter(prefix="/api/v1/auth", tags=['Auth'])
 
 
 @router.post("/verify-email")

@@ -10,6 +10,7 @@ class CustomerDTO(BaseModel):
     password: str
     is_verified: bool
     date_id: int
+    api_key: Optional[str]
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]

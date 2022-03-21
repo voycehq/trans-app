@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Body
 
-from app.dto.auth.auth import SignupDTO
+from app.dto.controller.auth import SignupDTO
 
 
-router = APIRouter(prefix="/api/v1/auth")
+router = APIRouter(prefix="/api/v1/auth", tags=['Auth'])
 
 
 @router.post('/signup')
@@ -21,7 +21,7 @@ async def signup(data: SignupDTO = Body(...)):
     if customer:
         from fastapi import status
 
-        return CustomException(error="email Already Exist", status_code=status.HTTP_400_BAD_REQUEST)
+        return CustomException(error="Email already exist", status_code=status.HTTP_400_BAD_REQUEST)
 
     # create user account (includes password hashing)
     new_customer = CustomerLib.create(data=jsonable_encoder(data))
