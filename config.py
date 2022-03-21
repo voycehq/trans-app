@@ -11,6 +11,13 @@ class FactoryConfig(BaseSettings):
     ENV: str = Field(..., env='ENV')
     SQLALCHEMY_DATABASE_URL: str
 
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_FROM: str
+    MAIL_PORT: int
+    MAIL_SERVER: str
+    MAIL_FROM_NAME: str
+
     class Config:
         env_file = os.path.join(base_dir, '.env')
 

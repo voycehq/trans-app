@@ -1,7 +1,7 @@
-from app.models import *
 from sqlalchemy.ext.declarative import declarative_base
 
 Base_Model = declarative_base()
+from app.models import *
 
 
 def create_app():
@@ -34,6 +34,11 @@ def create_app():
     main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     # Routes
+    from app.controller.auth import signup
+    from app.controller.auth import email_verification
+
+    main_app.include_router(signup.router)
+    # main_app.include_router(email_verification.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError
