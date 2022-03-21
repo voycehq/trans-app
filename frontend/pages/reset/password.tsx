@@ -1,30 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import auth from "../../api/auth";
+import Alert from "../../components/Alert";
 
-import { InputEmail, InputPassword, InputText } from "../../components/Inputs";
+import { InputPassword, InputText } from "../../components/Inputs";
 import Logo from "../../components/Logo";
 import Spinner from "../../components/Spinner";
+import useApi from "../../libs/useApi";
+import authStorage from "../../store";
 import style from "../../styles/pages/Login.module.sass";
 
 const Signup: NextPage = () => {
+  const router = useRouter();
   const inputTextRef = useRef<HTMLInputElement>(null);
   const s: any = { width: "100%", marginBottom: "20px" };
   const [state, setState] = useState({
     password: "",
     code: "",
   });
-  const [loading, setLoading] = useState(false);
+  const { setEmail, recoveryEmail, getUser, user } = authStorage();
+  const { request, loading, message, status, error, data } = useApi(
+    auth.resetPassword
+  );
 
   const onChange = ({ target: { id, value } }: any) =>
     setState({ ...state, [id]: value });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    setLoading(!loading);
-    console.log(state);
+    request({ ...state, email: recoveryEmail });
   };
+
+  // Hooks
+  useEffect(() => inputTextRef.current?.focus(), []);
+  useEffect(() => {
+    if (status !== 200) return;
+    setEmail(null);
+    setTimeout(() => router.push("/login"), 5000);
+  }, [data]);
+
+  useEffect(() => {
+    const user = getUser();
+    if (user) router.push("/login");
+  }, [user]);
 
   return (
     <main className={style.main}>
@@ -32,7 +53,11 @@ const Signup: NextPage = () => {
         <header className={style.header}>
           <Logo />
         </header>
-        <form className={style.form} onSubmit={onSubmit}>
+        <form
+          style={{ gap: ".5rem" }}
+          className={style.form}
+          onSubmit={onSubmit}
+        >
           <header>
             <h2>Password Reset</h2>
             <p>
@@ -42,6 +67,12 @@ const Signup: NextPage = () => {
           </header>
 
           <div>
+            <Alert
+              className={status !== 200 ? "danger" : "success"}
+              visible={status !== null}
+            >
+              {message}
+            </Alert>
             <InputText
               height={50}
               s={s}
@@ -62,8 +93,9 @@ const Signup: NextPage = () => {
           </div>
 
           <footer>
-            {/* Checkbox about agreement to privacy policy */}
-            <span></span>
+            <Link href="/login">
+              <a>Back to login</a>
+            </Link>
 
             <button type={loading ? "button" : "submit"}>
               {loading && <Spinner visible bgColor="#fff" />}

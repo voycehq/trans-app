@@ -30,5 +30,23 @@ interface LoginProps {
 const login = async (data: LoginProps) =>
   await client.post(`${endpoint}/login`, data);
 
-const auth = { signup, verifyEmail, resendCode, login };
+const forgotPassword = async (data: CodeProps) =>
+  await client.post(`${endpoint}/forgot-password`, data);
+
+interface ResetPasswordProps {
+  code: string;
+  email: string;
+  password: string;
+}
+const resetPassword = async (data: ResetPasswordProps) =>
+  await client.post(`${endpoint}/reset-password`, data);
+
+const auth = {
+  signup,
+  verifyEmail,
+  resendCode,
+  login,
+  forgotPassword,
+  resetPassword,
+};
 export default auth;
