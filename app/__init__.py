@@ -76,6 +76,9 @@ def create_app():
             content={"statusCode": exc.status, "message": exc.error}
         )
 
-    Base_Model.metadata.create_all(bind=engine)
+    # Base_Model.metadata.create_all(bind=engine)
+    # Bootstrap
+    from app.config.bootstrap import Bootstrap
+    Bootstrap().run()
 
     return main_app
