@@ -31,4 +31,5 @@ class Workspace(Base_Model):
 
     customer = relationship("Customer",
                             backref=backref("customer",
-                                            lazy="joined"))
+                                            lazy="joined",
+                                            overlaps="workspace,workspace"))

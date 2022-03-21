@@ -3,7 +3,7 @@ from app import Base_Model
 
 class Customer(Base_Model):
     from datetime import datetime
-    from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+    from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
     from sqlalchemy.orm import relationship, backref
 
     __tablename__: str = "customer"
@@ -14,20 +14,11 @@ class Customer(Base_Model):
     email = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
 
-    default_language = Column(Integer, ForeignKey("language.id", ondelete="NO ACTION"), nullable=True)
+    is_verified = Column(Boolean, default=False)
     date_id = Column(Integer, ForeignKey("date.id", ondelete="RESTRICT"), nullable=False)
 
     created_on = Column(DateTime, default=datetime.utcnow())
     updated_on = Column(DateTime, onupdate=datetime.utcnow())
     deleted_on = Column(DateTime, nullable=True)
 
-    workspace = relationship("Workspace",
-                             backref=backref("workspace",
-                                             lazy="joined",
-                                             single_parent=True,
-                                             passive_deletes=True,
-                                             overlaps="workspace,workspace"))
-    workspace_details = relationship("WorkspaceDetail",
-                                    backref=backref("workspace_details",
-                                                    lazy="joined"))
 

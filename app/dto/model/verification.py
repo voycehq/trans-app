@@ -1,15 +1,15 @@
 from datetime import datetime
+from typing import Text, Optional, List
+
 from pydantic import BaseModel
-from typing import Optional, List
 
 
-class CustomerDTO(BaseModel):
+class VerificationDTO(BaseModel):
+
     id: int
-    full_name: str
-    email: str
-    password: str
-    is_verified: bool
-    date_id: int
+    customer_id: int
+    verification_type: str
+    code: str
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
@@ -18,8 +18,8 @@ class CustomerDTO(BaseModel):
         orm_mode = True
 
 
-class CustomerDTOs(BaseModel):
-    __root__: Optional[List[CustomerDTO]]
+class VerificationDTOs(BaseModel):
+    __root__: Optional[List[VerificationDTO]]
 
     class Config:
         orm_mode = True
