@@ -53,7 +53,7 @@ const Signup: NextPage = () => {
 
       if (apiKey && user.is_verified) router.push("/dashboard");
       else router.push("/login");
-    } else router.push("/login");
+    }
   }, [user]);
 
   return (

@@ -7,6 +7,7 @@ export interface User {
   email: string;
   full_name: string;
   is_verified: boolean;
+  api_key?: string;
   deleted_on?: string;
   created_on?: string;
   updated_on?: string;
@@ -24,7 +25,8 @@ const authStorage = create(
         set((state: any) => ({ ...state, apiKey })),
 
       getUser: (): User => get().user,
-      setUser: (user: User) => set((state: any) => ({ ...state, user })),
+      setUser: (user: User) =>
+        set((state: any) => ({ ...state, user, apiKey: user.api_key })),
       updateUser: (data: any) => {
         const user: any = get().user;
         Object.keys(data).forEach((key: string) => {
