@@ -31,3 +31,12 @@ class ResendVerificationCodeDTO(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ResetPasswordDTO(BaseModel):
+    email: str = Field(..., title='Your account email')
+    code: str = Field(..., min_length=9)
+    password: str = Field(..., min_length=8)
+
+    class Config:
+        orm_mode = True
