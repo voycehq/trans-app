@@ -7,18 +7,6 @@ from app.utils.session import session_hook
 
 class LanguageLib:
 
-    def __init__(self):
-        self.languages = [{'name': 'English', 'code': 'en', 'html_code': 'translator-lang-option-en-US'},
-                          {'name': 'French', 'code': 'fr', 'html_code': 'translator-lang-option-fr-FR'},
-                          {'name': 'Spanish', 'code': 'es', 'html_code': 'translator-lang-option-es-ES'}]
-
-    def run(self):
-        from app.logs import logger
-
-        LanguageLib.create(records=self.languages)
-
-        logger.info(f"Done Creating customer Languages")
-
     @staticmethod
     @session_hook
     def find_by(db: Session, where: dict, get_all: bool = False):
@@ -32,7 +20,7 @@ class LanguageLib:
 
     @staticmethod
     @session_hook
-    def create(db: Session, records: [dict]):
+    def bulk_create(db: Session, records: [dict]):
         from sqlalchemy.exc import IntegrityError
 
         for data in records:

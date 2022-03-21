@@ -15,31 +15,22 @@ class WorkspaceRoleLib:
     """
     from app.utils.session import session_hook
 
-    def __init__(self):
-        self.roles: [] = ["admin", "reviewer"]
-
-    def run(self):
-        from app.logs import logger
-
-        WorkspaceRoleLib.create(names=self.roles)
-        logger.info(f"Done Creating customer roles")
-
     @staticmethod
     @session_hook
-    def create(db: Session, names: []):
+    def bulk_create(db: Session, names: []):
         from sqlalchemy.exc import IntegrityError
 
         for name in names:
-            data: dict = {"name": name}
-
-            workspace_role = WorkspaceRole(**data)
+            record: dict = {"name": name}
 
             try:
-                db.add(workspace_role)
-                db.flush()
+                db.bulk_insert_mappings(WorkspaceRole, [record])
             except IntegrityError:
                 db.rollback()
-                continue
+                record = WorkspaceRoleLib.find_by(where={"name": name})
+                db.bulk_update_mappings(WorkspaceRole, [record])
+
+        db.flush()
 
         return
 

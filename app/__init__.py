@@ -75,7 +75,6 @@ def create_app():
     # Base_Model.metadata.create_all(bind=engine)
     # Bootstrap
     from app.config.bootstrap import Bootstrap
-
     Bootstrap().run()
 
     return main_app
