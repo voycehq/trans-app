@@ -1,6 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 
 Base_Model = declarative_base()
+from app.models import *
 
 
 def create_app():

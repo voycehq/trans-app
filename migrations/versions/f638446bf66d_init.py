@@ -1,8 +1,8 @@
-"""project setup
+"""init
 
-Revision ID: e93a787ad4ca
+Revision ID: f638446bf66d
 Revises: 
-Create Date: 2022-03-19 08:31:46.607629
+Create Date: 2022-03-21 11:08:44.214105
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = 'e93a787ad4ca'
+revision = 'f638446bf66d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,7 +34,7 @@ def upgrade():
     sa.Column('day_name', sa.String(length=100), nullable=False),
     sa.Column('is_working_day', sa.Boolean(), nullable=False),
     sa.Column('quarter', sa.Integer(), nullable=False),
-    sa.Column('Year_half', sa.Integer(), nullable=False),
+    sa.Column('year_half', sa.Integer(), nullable=False),
     sa.Column('created_on', sa.DateTime(), nullable=True),
     sa.Column('updated_on', sa.DateTime(), nullable=True),
     sa.Column('deleted_on', sa.DateTime(), nullable=True),
@@ -46,6 +46,19 @@ def upgrade():
     sa.Column('created_on', sa.DateTime(), nullable=True),
     sa.Column('updated_on', sa.DateTime(), nullable=True),
     sa.Column('deleted_on', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('customer',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('full_name', sa.String(length=255), nullable=False),
+    sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('password', sa.String(length=255), nullable=False),
+    sa.Column('is_verified', sa.Boolean(), nullable=True),
+    sa.Column('date_id', sa.Integer(), nullable=False),
+    sa.Column('created_on', sa.DateTime(), nullable=True),
+    sa.Column('updated_on', sa.DateTime(), nullable=True),
+    sa.Column('deleted_on', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['date_id'], ['date.id'], ondelete='RESTRICT'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('language',
@@ -69,18 +82,15 @@ def upgrade():
     sa.ForeignKeyConstraint(['date_id'], ['date.id'], ondelete='RESTRICT'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('customer',
+    op.create_table('verification',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('full_name', sa.String(length=255), nullable=False),
-    sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('password', sa.String(length=255), nullable=False),
-    sa.Column('default_language', sa.Integer(), nullable=True),
-    sa.Column('date_id', sa.Integer(), nullable=False),
+    sa.Column('customer_id', sa.Integer(), nullable=True),
+    sa.Column('verification_type', sa.String(length=255), nullable=False),
+    sa.Column('code', sa.String(length=255), nullable=True),
     sa.Column('created_on', sa.DateTime(), nullable=True),
     sa.Column('updated_on', sa.DateTime(), nullable=True),
     sa.Column('deleted_on', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['date_id'], ['date.id'], ondelete='RESTRICT'),
-    sa.ForeignKeyConstraint(['default_language'], ['language.id'], ondelete='NO ACTION'),
+    sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('workspace',
@@ -152,9 +162,10 @@ def downgrade():
     op.drop_table('workspace_detail')
     op.drop_table('text')
     op.drop_table('workspace')
-    op.drop_table('customer')
+    op.drop_table('verification')
     op.drop_table('language_setting')
     op.drop_table('language')
+    op.drop_table('customer')
     op.drop_table('workspace_role')
     op.drop_table('date')
     # ### end Alembic commands ###

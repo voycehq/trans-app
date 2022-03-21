@@ -1,6 +1,7 @@
 class CustomerLib:
     from app.utils.session import session_hook
     from sqlalchemy.orm import Session
+    from app.dto.model.customer import CustomerDTO
 
     @staticmethod
     @session_hook
@@ -18,7 +19,7 @@ class CustomerLib:
 
     @staticmethod
     @session_hook
-    def create(db: Session, data: dict):
+    def create(db: Session, data: dict) -> CustomerDTO:
         from app.models.customer import Customer
         from app.service.model.date import DateLib
         from app.dto.model.customer import CustomerDTO

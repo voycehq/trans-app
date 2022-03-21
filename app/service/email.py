@@ -1,8 +1,5 @@
-from app.utils.utils import Utils
-
-
 class EmailLib:
-    from app.dto.model.customer import CustomerDTO
+    from typing import List, Any
 
     from fastapi_mail import ConnectionConfig
     from config import config
@@ -18,32 +15,22 @@ class EmailLib:
         MAIL_SSL=False
     )
 
+    # noinspection PyBroadException
     @staticmethod
-    async def send_emails(customer: CustomerDTO):
+    async def send_emails(subject: str, recipients: str, body: Any):
         from fastapi_mail import MessageSchema
         from fastapi_mail import FastMail
-        from app.service.model.verification import VerificationLib
 
-        code = Utils.generate_code()
-
-        body = f"To verify your email use the code: {code}"
-
-        # create and send email verification email
         message = MessageSchema(
-            subject="testing",
-            recipients=[customer.email],
+            subject=subject,
+            recipients=[recipients],
             body=body
         )
 
         fm = FastMail(EmailLib.conf)
-        await fm.send_message(message)
-
-        # Save verification credentials
-        data = {
-            "customer_id": customer.id,
-            "code": code,
-            "verification_type": "EmailVerification"
-        }
-        verification = VerificationLib.create_verification(data=data)
-
-        return verification
+        from app.logs import logger
+        try:
+            await fm.send_message(message)
+            logger.error(f'Successfully sent email to {recipients}')
+        except Exception:
+            logger.error(f'Failed sending email to {recipients}')
