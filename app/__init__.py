@@ -38,7 +38,7 @@ def create_app():
     from app.controller.auth import email_verification
     from app.controller.auth import login
     from app.controller.auth import resend_verification_code
-    from app.controller.workspace import workspace
+    from app.controller.workspace import create_workspace
     from app.controller.auth import forgot_password
     from app.controller.auth import reset_password
 
@@ -46,7 +46,7 @@ def create_app():
     main_app.include_router(email_verification.router)
     main_app.include_router(login.router)
     main_app.include_router(resend_verification_code.router)
-    main_app.include_router(workspace.router)
+    main_app.include_router(create_workspace.router)
     main_app.include_router(forgot_password.router)
     main_app.include_router(reset_password.router)
 

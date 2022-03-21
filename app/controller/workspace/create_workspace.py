@@ -6,7 +6,7 @@ from app.dto.controller.workspace import CreateWorkspaceDTO
 router = APIRouter(dependencies=[Depends(Authorization.authenticate)], tags=["workspace"])
 
 
-@router.post('/api/v1/create-new-workspace')
+@router.post('/api/v1/workspace/create-new-workspace')
 def create_workspace(data: CreateWorkspaceDTO = Body(...)):
     from app.config.authorization import Authorization
     from app.dto.model.customer import CustomerDTO

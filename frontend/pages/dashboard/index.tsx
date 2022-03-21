@@ -1,26 +1,73 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import workspace from "../../api/workspace";
+import Alert from "../../components/Alert";
 
 import { InputText } from "../../components/Inputs";
 import Logo from "../../components/Logo";
+import SelectMenu from "../../components/SelectMenu";
 import Spinner from "../../components/Spinner";
+import useApi from "../../libs/useApi";
+import authStorage from "../../store";
 import style from "../../styles/pages/Dashboard.module.sass";
 
+const languageOption = [
+  { value: "english", label: "English" },
+  { value: "french", label: "French" },
+  { value: "spanish", label: "Spanish" },
+];
+
 const Home: NextPage = () => {
+  const router = useRouter();
   const inputTextRef = useRef<HTMLInputElement>(null);
-  const [state, setState] = useState({ name: "" });
-  const [loading, setLoading] = useState(false);
+  const [state, setState]: any = useState({
+    name: "",
+    default_language: null,
+  });
+  const { setUser, user, apiKey, getUser } = authStorage();
+  const { request, loading, error, message, status, data, _private } = useApi(
+    workspace.newWorkspace
+  );
 
   const handleOnChange = ({ target: { value } }: any) =>
-    setState({ name: value });
+    setState({ ...state, name: value });
+
+  const onLanguageChange = (arr: any) => {
+    if (!arr) return setState({ ...state, default_language: arr });
+    if (state.default_language && state.default_language.value == arr.value)
+      return;
+
+    setState({ ...state, default_language: arr });
+  };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(!loading);
-    console.log(state);
+    if (state.default_language == null) {
+      setTimeout(() => {
+        _private._reset();
+      }, 5000);
+      _private._setError(true)._setMessage("Please select a defualt language");
+      return;
+    }
+    request({
+      name: state.name,
+      default_language: state.default_language.value,
+    });
   };
 
+  // Hooks
   useEffect(() => inputTextRef.current?.focus(), []);
+
+  useEffect(() => {
+    if (status == 200 && data) console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    const user = getUser();
+    if (!user || !apiKey) router.push("/login");
+  }, [user]);
 
   return (
     <main className={style.dashboard}>
@@ -37,14 +84,31 @@ const Home: NextPage = () => {
           <header>
             <h3>Create a workspace</h3>
           </header>
+          {error && (
+            <Alert className={error ? "danger" : "success"} visible={error}>
+              {message}
+            </Alert>
+          )}
           <form onSubmit={onSubmit}>
-            <InputText
-              label="New workspace"
-              id="name"
-              value={state.name}
-              inputRef={inputTextRef}
-              onChange={handleOnChange}
-            />
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}
+            >
+              <InputText
+                label="New workspace"
+                id="name"
+                value={state.name}
+                inputRef={inputTextRef}
+                onChange={handleOnChange}
+              />
+              <SelectMenu
+                id="translated_text"
+                palceholder="Select default langue"
+                onChange={onLanguageChange}
+                options={languageOption}
+                value={[state.default_language]}
+                width="100%"
+              />
+            </div>
             <button type={loading ? "button" : "submit"}>
               {loading && <Spinner visible bgColor="#fff" />}
               {!loading && <span>Sign in</span>}
