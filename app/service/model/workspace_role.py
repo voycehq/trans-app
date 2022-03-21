@@ -23,15 +23,17 @@ class WorkspaceRoleLib:
         list_to_be_updated: list = []
 
         for name in names:
-            record: dict = {"name": name}
+            record:  dict = {"name": name}
 
             try:
                 db.bulk_insert_mappings(WorkspaceRole, [record])
             except IntegrityError:
                 db.rollback()
-                record_to_update = WorkspaceRoleLib.update(data=record)
+                data = db.query(WorkspaceRole).filter_by(name=record.get("name")).first()
+                for key, value in record.items():
+                    data.__setattr__(key, value)
 
-                list_to_be_updated.append(record_to_update)
+                list_to_be_updated.append(WorkspaceRoleDTO.from_orm(data))
 
         if list_to_be_updated:
             db.bulk_update_mappings(WorkspaceRole, list_to_be_updated)
