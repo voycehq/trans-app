@@ -24,3 +24,10 @@ class LoginDTO(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ResendVerificationCodeDTO(BaseModel):
+    email: str = Field(..., title='Your account email')
+
+    class Config:
+        orm_mode = True

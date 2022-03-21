@@ -10,28 +10,31 @@ const useApi = (apiFunc: any) => {
   const resetState = () => {
     setError(false);
     setMessage(null);
+    setStatus(null);
+    setLoading(false);
+    setData(null);
   };
 
-  // class Private {
-  //   _setError(bool: boolean) {
-  //     setError(bool);
-  //     return this;
-  //   }
+  class Private {
+    _setError(bool: boolean) {
+      setError(bool);
+      return this;
+    }
 
-  //   _setMessage(str: string) {
-  //     setMessage(str);
-  //     return this;
-  //   }
+    _setMessage(str: string) {
+      setMessage(str);
+      return this;
+    }
 
-  //   _setLoading(bool: boolean) {
-  //     setLoading(bool);
-  //     return this;
-  //   }
+    _setLoading(bool: boolean) {
+      setLoading(bool);
+      return this;
+    }
 
-  //   _reset() {
-  //     resetState();
-  //   }
-  // }
+    _reset() {
+      resetState();
+    }
+  }
 
   const request = async (...args: any) => {
     resetState();
@@ -63,7 +66,7 @@ const useApi = (apiFunc: any) => {
     loading,
     status,
     request,
-    // _private: new Private(),
+    _private: new Private(),
   };
 };
 

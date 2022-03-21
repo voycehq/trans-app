@@ -23,8 +23,16 @@ const authStorage = create(
       setApiKey: (apiKey: string) =>
         set((state: any) => ({ ...state, apiKey })),
 
-      setUser: (user: User) => set((state: any) => ({ ...state, user })),
       getUser: (): User => get().user,
+      setUser: (user: User) => set((state: any) => ({ ...state, user })),
+      updateUser: (data: any) => {
+        const user: any = get().user;
+        Object.keys(data).forEach((key: string) => {
+          user[key] = data[key];
+        });
+
+        get().setUser(user);
+      },
     }),
     { name: "voyce" }
   )
