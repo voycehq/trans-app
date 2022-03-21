@@ -22,12 +22,17 @@ class LanguageLib:
     @session_hook
     def bulk_create(db: Session, records: [dict]):
         from sqlalchemy.exc import IntegrityError
+        list_to_be_updated: list = []
 
         for data in records:
             try:
                 db.bulk_insert_mappings(Language, [data])
             except IntegrityError:
                 db.rollback()
-                db.bulk_update_mappings(Language, data)
+                record = LanguageLib.find_by(where={"code": data.get("code")})
+                list_to_be_updated.append(record)
+
+        if list_to_be_updated:
+            db.bulk_update_mappings(Language, list_to_be_updated)
 
         db.flush()

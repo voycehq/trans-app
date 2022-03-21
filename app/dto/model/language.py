@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 class LanguageDTO(BaseModel):
     id: int
-    date_id: int
     name: str
     created_on: datetime
     updated_on: Optional[datetime]

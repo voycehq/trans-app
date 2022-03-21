@@ -20,6 +20,8 @@ class WorkspaceRoleLib:
     def bulk_create(db: Session, names: []):
         from sqlalchemy.exc import IntegrityError
 
+        list_to_be_updated: list = []
+
         for name in names:
             record: dict = {"name": name}
 
@@ -28,7 +30,11 @@ class WorkspaceRoleLib:
             except IntegrityError:
                 db.rollback()
                 record = WorkspaceRoleLib.find_by(where={"name": name})
-                db.bulk_update_mappings(WorkspaceRole, [record])
+
+                list_to_be_updated.append(record)
+
+        if list_to_be_updated:
+            db.bulk_update_mappings(WorkspaceRole, list_to_be_updated)
 
         db.flush()
 
