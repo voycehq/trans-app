@@ -16,7 +16,7 @@ class Bootstrap:
         from app.service.model.workspace_role import WorkspaceRoleLib
         from app.logs import logger
 
-        roles = ["admin", "reviewer"]
+        roles = [{"name": "admin"}, {"name": "reviewer"}]
         WorkspaceRoleLib.bulk_create(names=roles)
 
         logger.info(f"Done Creating customer roles")

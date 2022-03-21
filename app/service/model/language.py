@@ -32,10 +32,9 @@ class LanguageLib:
                 db.bulk_insert_mappings(Language, [data])
             except IntegrityError:
                 db.rollback()
-                record = db.query(Language).filter_by(code=data.get("code")).first()
-                for key, value in data.items():
-                    record.__setattr__(key, value)
-                list_to_be_updated.append(LanguageDTO.from_orm(record))
+                record = LanguageLib.find_by(where={"code": data.get("code")})
+                data['id'] = record.id
+                list_to_be_updated.append(data)
 
         if list_to_be_updated:
             db.bulk_update_mappings(Language, list_to_be_updated)
