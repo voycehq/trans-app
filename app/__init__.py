@@ -37,12 +37,20 @@ def create_app():
     from app.controller.auth import signup
     from app.controller.auth import email_verification
     from app.controller.auth import login
+<<<<<<< HEAD
+    from app.controller.auth import resend_verification_code
+=======
     from app.controller.workspace import workspace
+>>>>>>> 03c125bf9c89c786b97e0389fd07aa7538ae54af
 
     main_app.include_router(signup.router)
     main_app.include_router(email_verification.router)
     main_app.include_router(login.router)
+<<<<<<< HEAD
+    main_app.include_router(resend_verification_code.router)
+=======
     main_app.include_router(workspace.router)
+>>>>>>> 03c125bf9c89c786b97e0389fd07aa7538ae54af
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError

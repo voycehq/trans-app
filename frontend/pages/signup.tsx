@@ -17,7 +17,7 @@ const Signup: NextPage = () => {
   const router = useRouter();
   const inputTextRef = useRef<HTMLInputElement>(null);
   const s: any = { width: "100%", marginBottom: "20px" };
-  const { setUser, user } = authStorage();
+  const { setUser, user, apiKey, getUser } = authStorage();
 
   const [state, setState] = useState({
     email: "",
@@ -40,7 +40,6 @@ const Signup: NextPage = () => {
   useEffect(() => inputTextRef.current?.focus(), []);
 
   useEffect(() => {
-    console.log(error, loading, message, status, data);
     if (status !== 200) return;
     setUser(data?.data);
 
@@ -48,7 +47,13 @@ const Signup: NextPage = () => {
   }, [data]);
 
   useEffect(() => {
-    if (user) router.push("/dashboard");
+    const user = getUser();
+    if (user) {
+      if (!user.is_verified) router.push("/verify");
+
+      if (apiKey && user.is_verified) router.push("/dashboard");
+      else router.push("/login");
+    } else router.push("/login");
   }, [user]);
 
   return (
