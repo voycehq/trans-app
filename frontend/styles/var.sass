@@ -30,6 +30,15 @@ $font-family: 'Google Sans', sans-serif, -apple-system, BlinkMacSystemFont, Sego
 		background-color: $primary-color
 		cursor: pointer
 
+@mixin smallButtonStyle()
+	@include buttonStyle()
+	background-color: $secondary-color
+	color: $white-color
+	height: rem(35px)
+	padding: 0 .5rem
+	border-radius: rem(5px)
+	font-size: rem(14px)
+
 @mixin middleLine()
 	content: ""
 	background-color: #70757a

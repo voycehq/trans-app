@@ -1,0 +1,70 @@
+@use '../var'
+
+.body__content
+	display: flex
+	flex-direction: column
+	height: 100%
+	header
+		border-bottom: var.$border
+		padding: .8rem 0
+		display: flex
+		align-items: center
+		gap: 1rem
+		span
+			display: flex
+			justify-content: center
+			align-items: center
+
+	main
+		padding: 1rem 0 0
+		display: flex
+		justify-content: space-between
+		flex: 1 1 100%
+		gap: 1rem
+		ul
+			display: flex
+			flex-direction: column
+			align-items: center
+			height: 100%
+			justify-content: center
+			gap: 1rem
+			li p
+				border-top: var.$border
+				border-bottom: var.$border
+		div
+			height: 100%
+			display: flex
+			align-items: center
+			button
+				color: var.$primary-color
+				padding: .2rem .5rem
+				border-radius: 50%
+				height: var.rem(40px)
+				width: var.rem(40px)
+				display: flex
+				justify-content: center
+				align-items: center
+				cursor: pointer
+				transition: unset
+				background-color: var.$primary-color
+				svg
+					fill: var.$white-color
+					transition: unset
+				&:hover
+
+		textarea
+			height: 100%
+			flex: 1 1 auto
+			outline: none
+			resize: none
+			padding: 1rem
+			padding-top: 0rem
+			border: var.$border
+			color: var.$text-color
+			font-size: var.rem(16px)
+			line-height: 1.5
+			border-bottom: none
+			border-top: none
+			&::-webkit-scrollbar
+				width: var.rem(8px)
+				height: var.rem(8px)
