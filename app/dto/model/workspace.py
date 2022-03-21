@@ -9,6 +9,7 @@ class WorkspaceDTO(BaseModel):
     name: str
     customer_id: int
     customer_count: int
+    default_language: int
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
@@ -22,3 +23,4 @@ class WorkspaceDTOs(BaseModel):
 
     class Config:
         orm_mode = True
+

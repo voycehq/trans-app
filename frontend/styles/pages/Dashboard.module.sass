@@ -1,0 +1,86 @@
+@use '../var'
+
+.dashboard
+	min-width: 100vw
+	min-height: 100vh
+	display: flex
+	justify-content: center
+	align-items: center
+	text-align: center
+	position: relative
+	// &::before,
+	// &::after
+	// 	content: ""
+	// 	background-size: contain
+	// 	background-repeat: no-repeat
+	// 	height: var.rem(300px)
+	// 	width: var.rem(200px)
+	// 	position: absolute
+	// 	top: 4rem
+	// 	pointer-events: none
+	// 	z-index: -4
+	// &::before
+	// 	top: 3rem
+	// 	background-image: url('/image/dashboard-one.png')
+	// 	left: 0
+	// &::after
+	// 	background-image: url('/image/dashboard-two.png')
+	// 	right: 0
+	// 	bottom: 0
+	@media only screen and (max-width: var.rem(900px))
+		align-items: flex-start
+		margin-top: 2rem
+		min-width: 100%
+		min-height: 100%
+		// &::before
+		// 	opacity: .3
+		// 	top: 0
+		// &::after
+		// 	top: unset
+		// 	bottom: 0
+		// 	opacity: .5
+
+.wrapper
+	@media only screen and (max-width: var.rem(900px))
+		padding: 2rem
+		header p br
+			display: none
+
+.workspace
+	margin-top: 4rem
+	header
+		text-align: left
+		border-bottom: var.$border
+		border-top: var.$border
+		padding: 1rem 0
+		margin-bottom: 1rem
+
+	form
+		display: flex
+		align-items: center
+		gap: 1rem
+		div
+			margin: 0
+			text-align: left
+		button
+			@include var.smallButtonStyle()
+
+// .new__workspace
+// 	border: var.$border
+// 	border-radius: var.rem(8px)
+// 	height: var.rem(150px)
+// 	width: var.rem(150px)
+// 	display: flex
+// 	justify-content: center
+// 	align-items: center
+// 	cursor: pointer
+// 	background-color: var.$white-color
+// 	span
+// 		background-color: var.$hover-color
+// 		display: flex
+// 		justify-content: center
+// 		align-items: center
+// 		padding: 1rem
+// 		border-radius: 50%
+// 	&:hover
+// 		background-color: var.$hover-color

@@ -1,7 +1,7 @@
-from app.models import *
 from sqlalchemy.ext.declarative import declarative_base
 
 Base_Model = declarative_base()
+from app.models import *
 
 
 def create_app():
@@ -34,6 +34,21 @@ def create_app():
     main_app.mount("/static", StaticFiles(directory="static"), name="static")
 
     # Routes
+    from app.controller.auth import signup
+    from app.controller.auth import email_verification
+    from app.controller.auth import login
+    from app.controller.auth import resend_verification_code
+    from app.controller.workspace import workspace
+    from app.controller.auth import forgot_password
+    from app.controller.auth import reset_password
+
+    main_app.include_router(signup.router)
+    main_app.include_router(email_verification.router)
+    main_app.include_router(login.router)
+    main_app.include_router(resend_verification_code.router)
+    main_app.include_router(workspace.router)
+    main_app.include_router(forgot_password.router)
+    main_app.include_router(reset_password.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError
@@ -41,12 +56,14 @@ def create_app():
     @main_app.exception_handler(RequestValidationError)
     async def http_exception_handler(request, error):
         import json
+        from app.logs import logger
 
         errors = list()
         for err in json.loads(error.json()):
             errors.append({err['loc'][-1]: err['msg']})
-        message = f"{list(errors[0].keys())[0]} {list(errors[0].values())[0]}"
-        return JSONResponse(content={'statusCode': status.HTTP_400_BAD_REQUEST, "message": message, "error": errors[0]},
+        message = f"{list(errors[0].keys())[0]}: {list(errors[0].values())[0]}"
+        logger.error(message)
+        return JSONResponse(content={'statusCode': status.HTTP_400_BAD_REQUEST, "message": message, "error": message},
                             status_code=status.HTTP_400_BAD_REQUEST)
 
     # Customer Exception

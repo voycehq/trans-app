@@ -20,3 +20,12 @@ class SuccessResponse:
         result: dict = {**self.result, 'statusCode': self.statusCode}
         return JSONResponse(content=jsonable_encoder(result), status_code=self.statusCode)
 
+
+# Custom error route response
+class CustomException(Exception):
+    from fastapi import status
+
+    def __init__(self, error: str, status_code: int = status.HTTP_400_BAD_REQUEST):
+        self.error = error
+        self.status = status_code
+        self.message = error

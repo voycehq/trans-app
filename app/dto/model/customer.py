@@ -8,8 +8,9 @@ class CustomerDTO(BaseModel):
     full_name: str
     email: str
     password: str
-    default_language: Optional[int]
+    is_verified: bool
     date_id: int
+    api_key: Optional[str]
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]

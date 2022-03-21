@@ -6,9 +6,16 @@ async def catch_all_exceptions(request: Request, call_next):
         return await call_next(request)
     except Exception as exc:
         from app.logs import logger
-        import traceback
-        from fastapi import Response
+        from fastapi.responses import JSONResponse
+        from fastapi import status
+        from config import config
 
-        logger.error(exc, exc_info=True)
-        traceback.print_exc()
-        return Response("An error occurred. Contact an admin for assistance", status_code=500)
+        response: dict = {
+            "message": "An error occurred. Contact an admin for assistance",
+            "status_code": status.HTTP_500_INTERNAL_SERVER_ERROR
+        }
+        if config.ENV == "PROD":
+            logger.error("An error occurred. Contact an admin for assistance")
+        else:
+            logger.error(exc, exc_info=True)
+        return JSONResponse(content=response, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
