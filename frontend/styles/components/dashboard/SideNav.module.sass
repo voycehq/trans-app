@@ -1,0 +1,33 @@
+@use '../../var'
+
+.aside__bar
+	height: 100vh
+	min-width: var.rem(62px)
+	overflow: auto
+	border-right: var.$border
+	background-color: var.$white-color
+	display: flex
+	justify-content: center
+	padding: 1rem .5rem
+	ul
+		display: flex
+		flex-direction: column
+		gap: .5rem
+		li a
+			display: flex
+			justify-content: center
+			align-items: center
+			margin-top: .5rem
+	ul li button
+		width: 45px
+		height: 45px
+		border-radius: var.rem(4px)
+		border: var.$border
+		font-size: 1.2rem
+		border-width: var.rem(2px)
+		&:hover
+			cursor: pointer
+			border-color: var.$primary-color
+
+.active__workspace
+	border-color: var.$primary-color !important

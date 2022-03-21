@@ -46,7 +46,7 @@ const Home: NextPage = () => {
         <div className={style.image__wrapper}>
           <div className={style.image__item}>
             <Image
-              src="/image/dashboard.webp"
+              src="/image/dashboard-one.png"
               alt=""
               width={1516}
               height={948}
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
           <div className={style.divider}></div>
           <div className={style.image__item}>
             <Image
-              src="/image/dashboard.webp"
+              src="/image/dashboard-two.png"
               alt=""
               width={1516}
               height={948}

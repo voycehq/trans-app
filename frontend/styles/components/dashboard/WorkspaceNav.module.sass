@@ -1,0 +1,45 @@
+@use '../../var'
+
+.workspace__bar
+	height: 100vh
+	min-width: var.rem(250px)
+	flex-basis: var.rem(250px)
+	overflow: auto
+	border-right: var.$border
+	background-color: var.$white-color
+	header
+		padding: 1rem 1rem
+		border-bottom: var.$border
+		display: flex
+		justify-content: space-between
+		gap: 1rem
+		align-items: center
+		h3
+			font-weight: 500
+		&:hover
+			background-color: var.$hover-color
+			cursor: pointer
+
+	ul
+		padding-top: .5rem
+		li a
+			color: var.$text-color
+			display: flex
+			gap: .5rem
+			padding: .6rem .5rem
+			font-size: var.rem(15px)
+			transition: unset
+			align-items: center
+			&:hover
+				background-color: var.$hover-color
+
+.active__link
+	background-color: var.$primary-color
+	color: var.$white-color
+	span
+		color: var.$white-color
+	svg
+		fill: var.$white-color
+	&:hover
+		background-color: var.$primary-color !important
+		color: var.$white-color !important

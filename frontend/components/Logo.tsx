@@ -1,7 +1,10 @@
 import Link from "next/link";
 
-const Logo = () => (
-  <Link href="/">
+interface Props {
+  to?: string;
+}
+const Logo = ({ to }: Props) => (
+  <Link href={to ? to : "/"}>
     <a style={{ color: "black" }}>
       <h1>Voyce</h1>
     </a>

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { InputEmail, InputPassword } from "../components/Inputs";
 import Logo from "../components/Logo";
@@ -22,6 +22,8 @@ const Login: NextPage = () => {
     setLoading(!loading);
     console.log(state);
   };
+
+  useEffect(() => inputTextRef.current?.focus(), []);
 
   return (
     <main className={style.main}>

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { InputEmail, InputPassword, InputText } from "../components/Inputs";
 import Logo from "../components/Logo";
@@ -26,6 +26,8 @@ const Signup: NextPage = () => {
     setLoading(!loading);
     console.log(state);
   };
+
+  useEffect(() => inputTextRef.current?.focus(), []);
 
   return (
     <main className={style.main}>
@@ -53,7 +55,6 @@ const Signup: NextPage = () => {
               height={50}
               s={s}
               label="Email"
-              inputRef={inputTextRef}
               onChange={onChange}
               id="email"
               value={state.email}

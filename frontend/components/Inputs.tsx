@@ -27,6 +27,7 @@ interface InputProps {
   onChange?: any;
   id: string;
   value: string;
+  autoComplete?: boolean;
 }
 export const InputText = ({
   label,
@@ -46,6 +47,7 @@ export const InputText = ({
         onChange={rest.onChange}
         id={rest.id}
         value={rest.value}
+        autoComplete={rest.autoComplete}
       />
     </Wrapper>
   );
