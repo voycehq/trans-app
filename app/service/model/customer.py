@@ -1,12 +1,24 @@
+from app.dto.model.customer import CustomerDTO, CustomerDTOs
+
+
 class CustomerLib:
     from app.utils.session import session_hook
     from sqlalchemy.orm import Session
-    from app.dto.model.customer import CustomerDTO
+
+    @staticmethod
+    @session_hook
+    def update(db: Session, data: dict) -> CustomerDTO:
+        from app.models.customer import Customer
+
+        customer = db.query(Customer).filter_by(email=data.get("email")).first()
+        for key, value in data.items():
+            customer.__setattr__(key, value)
+        db.flush()
+        return CustomerDTO.from_orm(customer)
 
     @staticmethod
     @session_hook
     def find_by(db: Session, where: dict, get_all: bool = False):
-        from app.dto.model.customer import CustomerDTOs, CustomerDTO
         from app.models.customer import Customer
 
         record = db.query(Customer).filter_by(**where)
@@ -22,7 +34,6 @@ class CustomerLib:
     def create(db: Session, data: dict) -> CustomerDTO:
         from app.models.customer import Customer
         from app.service.model.date import DateLib
-        from app.dto.model.customer import CustomerDTO
         from app.utils.utils import Utils
 
         new_customer = Customer(**data)

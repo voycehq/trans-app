@@ -36,9 +36,11 @@ def create_app():
     # Routes
     from app.controller.auth import signup
     from app.controller.auth import email_verification
+    from app.controller.auth import login
 
     main_app.include_router(signup.router)
     main_app.include_router(email_verification.router)
+    main_app.include_router(login.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError
@@ -50,8 +52,8 @@ def create_app():
         errors = list()
         for err in json.loads(error.json()):
             errors.append({err['loc'][-1]: err['msg']})
-        message = f"{list(errors[0].keys())[0]} {list(errors[0].values())[0]}"
-        return JSONResponse(content={'statusCode': status.HTTP_400_BAD_REQUEST, "message": message, "error": errors[0]},
+        message = f"{list(errors[0].keys())[0]}: {list(errors[0].values())[0]}"
+        return JSONResponse(content={'statusCode': status.HTTP_400_BAD_REQUEST, "message": message, "error": message},
                             status_code=status.HTTP_400_BAD_REQUEST)
 
     # Customer Exception

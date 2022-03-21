@@ -16,3 +16,11 @@ class EmailVerificationDTO(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class LoginDTO(BaseModel):
+    email: str = Field(..., title='Your account email')
+    password: str = Field(..., title='Your account password')
+
+    class Config:
+        orm_mode = True
