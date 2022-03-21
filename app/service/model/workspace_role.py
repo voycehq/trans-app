@@ -5,7 +5,7 @@ from app.dto.model.workspace_role import WorkspaceRoleDTO, WorkspaceRoleDTOs
 
 
 class WorkspaceRoleLib:
-    """WorkspaceRoleLib for getting workspace role info from the database
+    """WorkspaceRoleLib for getting workspace role info into the database
 
     Args:
         No Args
@@ -15,22 +15,28 @@ class WorkspaceRoleLib:
     """
     from app.utils.session import session_hook
 
-    def __init__(self):
-        self.roles = ["admin", "reviewer"]
-
-    def run(self):
-        for role in self.roles:
-            WorkspaceRoleLib.create(data={"name": role})
-
     @staticmethod
     @session_hook
-    def create(db: Session, data: dict):
-        workspace_role = WorkspaceRole(**data)
+    def bulk_create(db: Session, names: []):
+        from sqlalchemy.exc import IntegrityError
 
-        db.add(workspace_role)
+        list_to_be_updated: list = []
+
+        for name in names:
+            try:
+                db.bulk_insert_mappings(WorkspaceRole, [name])
+            except IntegrityError:
+                db.rollback()
+                data = WorkspaceRoleLib.find_by(where={"name": name.get("name")})
+                name['id'] = data.id
+                list_to_be_updated.append(WorkspaceRoleDTO.from_orm(data))
+
+        if list_to_be_updated:
+            db.bulk_update_mappings(WorkspaceRole, list_to_be_updated)
+
         db.flush()
 
-        return WorkspaceRoleDTO.from_orm(workspace_role)
+        return
 
     @staticmethod
     @session_hook
@@ -42,3 +48,13 @@ class WorkspaceRoleLib:
             return None
 
         return WorkspaceRoleDTOs.from_orm(record).__root__ if get_all else WorkspaceRoleDTO.from_orm(record)
+
+    @staticmethod
+    @session_hook
+    def update(db: Session, data: dict) -> WorkspaceRoleDTO:
+
+        record = db.query(WorkspaceRole).filter_by(name=data.get("name")).first()
+        for key, value in data.items():
+            record.__setattr__(key, value)
+        db.flush()
+        return WorkspaceRoleDTO.from_orm(record)
