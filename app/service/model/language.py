@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
 from app.dto.model.language import LanguageDTO, LanguageDTOs
-from app.models.language import Language
 from app.utils.session import session_hook
 
 
@@ -10,6 +9,8 @@ class LanguageLib:
     @staticmethod
     @session_hook
     def find_by(db: Session, where: dict, get_all: bool = False):
+        from app.models.language import Language
+
         record = db.query(Language).filter_by(**where)
         record = record.all() if get_all else record.first()
 
@@ -22,6 +23,8 @@ class LanguageLib:
     @session_hook
     def bulk_create(db: Session, records: [dict]):
         from sqlalchemy.exc import IntegrityError
+        from app.models.language import Language
+
         list_to_be_updated: list = []
 
         for data in records:
@@ -42,8 +45,9 @@ class LanguageLib:
     @staticmethod
     @session_hook
     def update(db: Session, data: dict) -> LanguageDTO:
-
+        from app.models.language import Language
         record = db.query(Language).filter_by(code=data.get("code")).first()
+
         for key, value in data.items():
             record.__setattr__(key, value)
         db.flush()

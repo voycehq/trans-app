@@ -7,7 +7,7 @@ class VerificationLib:
 
     @staticmethod
     @session_hook
-    def create_verification(db: Session, data: dict):
+    def create(db: Session, data: dict):
         from app.models.verification import Verification
 
         verification = Verification(**data)

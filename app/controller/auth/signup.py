@@ -29,7 +29,7 @@ async def signup(data: SignupDTO = Body(...)):
 
     # Save verification credentials
     data = {"customer_id": new_customer.id, "code": code, "verification_type": "EmailVerification"}
-    VerificationLib.create_verification(data=data)
+    VerificationLib.create(data=data)
 
     # send email
     email_body: str = f"Use this code to verify your account: {code}"

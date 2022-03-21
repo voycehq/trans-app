@@ -23,5 +23,12 @@ interface CodeProps {
 const resendCode = async (data: CodeProps) =>
   await client.post(`${endpoint}/resend-verification-code`, data);
 
-const auth = { signup, verifyEmail, resendCode };
+interface LoginProps {
+  email: string;
+  password: string;
+}
+const login = async (data: LoginProps) =>
+  await client.post(`${endpoint}/login`, data);
+
+const auth = { signup, verifyEmail, resendCode, login };
 export default auth;

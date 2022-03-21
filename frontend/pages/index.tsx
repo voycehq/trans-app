@@ -2,10 +2,13 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../components/Logo";
+import authStorage from "../store";
 
 import style from "../styles/pages/Index.module.sass";
 
 const Home: NextPage = () => {
+  const user = authStorage().getUser();
+
   return (
     <div>
       <nav className={style.nav}>
@@ -15,14 +18,29 @@ const Home: NextPage = () => {
 
         <ul className={style.links}>
           <li>
-            <Link href="/login">
-              <a>Login</a>
-            </Link>
+            {user && (
+              <Link href="/">
+                <a>{user.full_name}</a>
+              </Link>
+            )}
+            {!user && (
+              <Link href="/login">
+                <a>Login</a>
+              </Link>
+            )}
           </li>
           <li>
-            <Link href="/signup">
-              <a>Sign up now</a>
-            </Link>
+            {user && (
+              <Link href="/dashboard">
+                <a>Dashboard</a>
+              </Link>
+            )}
+
+            {!user && (
+              <Link href="/signup">
+                <a>Sign up now</a>
+              </Link>
+            )}
           </li>
         </ul>
       </nav>

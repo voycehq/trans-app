@@ -10,6 +10,7 @@ class FactoryConfig(BaseSettings):
     PORT: str
     ENV: str = Field(..., env='ENV')
     SQLALCHEMY_DATABASE_URL: str
+    TRANSLATOR_URL: str
 
     MAIL_USERNAME: str
     MAIL_PASSWORD: str

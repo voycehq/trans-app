@@ -8,16 +8,17 @@ router = APIRouter(prefix="/api/v1/auth", tags=['Auth'])
 async def login(data: LoginDTO = Body(...)):
     from app.utils.utils import Utils
     from app.service.model.customer import CustomerLib
-    from app.config.success_response import CustomException
+    from app.config.success_response import SuccessResponse
     from fastapi import status
     from app.logs import logger
 
     # Get user by email
     where: dict = {"email": data.email}
     customer = CustomerLib.find_by(where=where, get_all=False)
+    status_code = status.HTTP_400_BAD_REQUEST
     if not customer or Utils.verify_hash(data.password, customer.password) is False:
         error: str = "Invalid user credentials"
-        return CustomException(status_code=status.HTTP_400_BAD_REQUEST, error=error)
+        return SuccessResponse(data=customer).set_message(error).set_status_code(status_code).response()
 
     # check if user is verified
     if not customer.is_verified:
@@ -34,10 +35,9 @@ async def login(data: LoginDTO = Body(...)):
 
         error: str = "Account not verified"
         logger.log(f"{customer.email} not verified")
-        return CustomException(status_code=status.HTTP_403_FORBIDDEN, error=error)
+        return SuccessResponse(data=customer).set_message(error).set_status_code(status.HTTP_403_FORBIDDEN).response()
 
     # Generate api-key
     api_key: str = Utils.generate_api_key()
     customer = CustomerLib.update(data={"email": data.email, "api_key": api_key})
-    from app.config.success_response import SuccessResponse
     return SuccessResponse(data=customer).set_message("Login successful").response()

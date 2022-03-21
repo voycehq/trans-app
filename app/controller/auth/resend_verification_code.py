@@ -15,7 +15,7 @@ async def resend_verification_code(data: ResendVerificationCodeDTO = Body(...)):
     code = status.HTTP_400_BAD_REQUEST
     customer = CustomerLib.find_by(where={"email": data.email})
     if not customer:
-        message: str = "Customer with this email doesn't Exist, Try signing up"
+        message: str = "Customer with this email doesn't exist"
         return SuccessResponse(data=None).set_message(message).set_status_code(code).response()
 
     # check if customer is verified
