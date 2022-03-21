@@ -20,18 +20,6 @@ class WorkspaceLib:
 
     @staticmethod
     @session_hook
-    def create_workspace_detail(db: Session, data: dict) -> WorkspaceDetailDTO:
-        from app.models.workspace_detail import WorkspaceDetail
-
-        workspace_detail = WorkspaceDetail(**data)
-
-        db.add(workspace_detail)
-        db.flush()
-
-        return WorkspaceDetailDTO.from_orm(workspace_detail)
-
-    @staticmethod
-    @session_hook
     def find_by(db: Session, where: dict, get_all: bool = False):
         record = db.query(Workspace).filter_by(**where)
         record = record.all() if get_all else record.first()
@@ -45,8 +33,10 @@ class WorkspaceLib:
     @session_hook
     def update(db: Session, data: dict) -> WorkspaceDTO:
 
-        customer = db.query(Workspace).filter_by(email=data.get("email")).first()
+        record = db.query(Workspace).filter_by(name=data.get("name"),
+                                               customer_id=data.get("customer_id")).first()
+
         for key, value in data.items():
-            customer.__setattr__(key, value)
+            record.__setattr__(key, value)
         db.flush()
-        return WorkspaceDTO.from_orm(customer)
+        return WorkspaceDTO.from_orm(record)

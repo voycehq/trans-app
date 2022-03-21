@@ -10,9 +10,9 @@ class Workspace(Base_Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
-    customer_id = Column(Integer, ForeignKey("customer.id", ondelete="RESTRICT"), nullable=True)
+    customer_id = Column(Integer, ForeignKey("customer.id", ondelete="RESTRICT"), nullable=False)
     customer_count = Column(Integer, default=0)
-    default_language = Column(Integer, ForeignKey("language.id", ondelete="NO ACTION"), nullable=True)
+    default_language = Column(Integer, ForeignKey("language.id", ondelete="NO ACTION"), nullable=False)
 
     created_on = Column(DateTime, default=datetime.utcnow())
     updated_on = Column(DateTime, onupdate=datetime.utcnow())
