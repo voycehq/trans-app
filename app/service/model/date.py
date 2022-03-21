@@ -119,7 +119,7 @@ class DateLib:
 
     @staticmethod
     @session_hook
-    def get_current_day_from_record(db: Session):
+    def get_today_date(db: Session):
         from datetime import datetime
         from app.models.date import Date
 
@@ -127,4 +127,8 @@ class DateLib:
 
         record = db.query(Date).filter_by(full_date=full_date).first()
 
-        return record if record else None
+        if not record:
+            DateLib().run()
+            record = db.query(Date).filter_by(full_date=full_date).first()
+
+        return record

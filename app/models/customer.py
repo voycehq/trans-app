@@ -21,13 +21,4 @@ class Customer(Base_Model):
     updated_on = Column(DateTime, onupdate=datetime.utcnow())
     deleted_on = Column(DateTime, nullable=True)
 
-    workspace = relationship("Workspace",
-                             backref=backref("workspace",
-                                             lazy="joined",
-                                             single_parent=True,
-                                             passive_deletes=True,
-                                             overlaps="workspace,workspace"))
-    workspace_details = relationship("WorkspaceDetail",
-                                    backref=backref("workspace_details",
-                                                    lazy="joined"))
 
