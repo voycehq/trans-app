@@ -4,7 +4,7 @@ class Bootstrap:
 
     def run(self):
         import os
-        from config import config
+        from config import base_dir
         
         # * Seed DB
         self.populate_date_model()
@@ -14,7 +14,7 @@ class Bootstrap:
         # * Setup system environment for Google TTS
         os.system(
             "export GOOGLE_APPLICATION_CREDENTIALS={tts_credential_path}".format(
-                tts_credential_path=config.GOOGLE_APPLICATION_CREDENTIALS))
+                tts_credential_path=f'{base_dir}/voyce-google-tts-credentials.json'))
 
     def populate_date_model(self):
         from app.service.model.date import DateLib
