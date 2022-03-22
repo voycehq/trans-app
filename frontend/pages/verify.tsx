@@ -50,7 +50,7 @@ const Verification: NextPage = () => {
     if (user) {
       if (!user.is_verified) return;
 
-      if (apiKey) router.push("/dashboard");
+      if (apiKey) router.push("/workspace");
       else router.push("/login");
     } else router.push("/login");
   }, [user]);
