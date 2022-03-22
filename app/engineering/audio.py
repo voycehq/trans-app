@@ -100,7 +100,7 @@ class AudioGenerator:
         
         return f'{target_language_code}-{math.ceil(datetime.timestamp(datetime.now()))}.mp3'
     
-    def __save_audio_file__(self, filename: str, tts_response: Any) -> None:
+    def __save_audio_file__(self, filename: str, tts_response: Any) -> str:
         from pathlib import Path
         
         # * Ensure customer audio folder is existing
@@ -116,7 +116,7 @@ class AudioGenerator:
         
         logger.info(f'Done saving audio file.')
         
-        return
+        return filepath
     
     @staticmethod
     def __unique_languages_from_voices__(voices):
@@ -154,7 +154,7 @@ class AudioGenerator:
         
         return voices
     
-    def generate(self) -> None:
+    def generate(self) -> List[str]:
         """
         This is the main generator function that generates the audio (MP3)
         for the translated script text.
@@ -162,6 +162,8 @@ class AudioGenerator:
         from datetime import datetime    
 
         logger.info('Start generating audio files for translated scripts')
+        audio_server_links: List[str] = []
+        
         # ** Loop through the translated text to generate audio
         for script in self.translated_scripts:
             # ** Ensure script has been reviewed
@@ -203,12 +205,16 @@ class AudioGenerator:
             audio_filename: str = self.__resolve_audio_filename__(target_language_code=language_setting.voice_language_code)
             
             # * 8th: Save audio file
-            self.__save_audio_file__(filename=audio_filename, tts_response=response)
+            filepath: str = self.__save_audio_file__(filename=audio_filename, tts_response=response)
             
             logger.info(f'Successfully generated audio for language_code={language_setting.voice_language_code}')
             
             # * 9th: Update TranslatedText object
             TranslatedTextLib.update(data={'text_id': script.text_id, 'language_id': script.language_id, 'audio_generation_date': datetime.now() })
 
-        logger.info('Done generating audio files for translated scripts')
-        return
+            # * 10th: Append audio server link
+            audio_server_link = f"/static/{filepath.split('/static/')[-1]}"
+            audio_server_links.append(audio_server_link)
+
+        logger.info(f'Done generating audio files for translated scripts: {audio_server_links}')
+        return audio_server_links

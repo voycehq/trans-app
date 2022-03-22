@@ -11,7 +11,7 @@ class TextDTO(BaseModel):
     body: Text
     customer_id: int
     reviewed_by: Optional[int]
-    workspace: int
+    workspace: Optional[int]
     date_id: int
     reviewed_date: Optional[datetime]
     created_on: datetime
