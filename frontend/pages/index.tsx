@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           </li>
           <li>
             {user && (
-              <Link href="/dashboard">
+              <Link href="/workspace">
                 <a>Dashboard</a>
               </Link>
             )}

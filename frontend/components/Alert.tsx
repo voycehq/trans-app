@@ -20,7 +20,7 @@ export default function Alert({
   };
   return (
     <div
-      onClick={onClick}
+      // onClick={onClick}
       style={{ visibility: visible ? "visible" : "hidden", ...rest }}
       className={`alert ${className}`}
     >

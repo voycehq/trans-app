@@ -20,6 +20,8 @@ const authStorage = create(
       user: null,
 
       // func
+      logout: () =>
+        set((state: any) => ({ ...state, apiKey: null, user: null })),
       getApiKey: (): string => get().apiKey,
       setApiKey: (apiKey: string) =>
         set((state: any) => ({ ...state, apiKey })),

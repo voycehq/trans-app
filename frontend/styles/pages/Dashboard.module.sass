@@ -1,9 +1,12 @@
 @use '../var'
 
 .dashboard
-	min-width: 100vw
-	min-height: 100vh
+	// min-width: 100vw
+	// min-height: 100vh
+	min-width: 100%
+	min-height: 100%
 	display: flex
+	padding: 2rem
 	justify-content: center
 	align-items: center
 	text-align: center
@@ -57,7 +60,6 @@
 
 	form
 		display: flex
-		align-items: center
 		gap: 1rem
 		div
 			margin: 0
@@ -65,22 +67,37 @@
 		button
 			@include var.smallButtonStyle()
 
-// .new__workspace
-// 	border: var.$border
-// 	border-radius: var.rem(8px)
-// 	height: var.rem(150px)
-// 	width: var.rem(150px)
-// 	display: flex
-// 	justify-content: center
-// 	align-items: center
-// 	cursor: pointer
-// 	background-color: var.$white-color
-// 	span
-// 		background-color: var.$hover-color
-// 		display: flex
-// 		justify-content: center
-// 		align-items: center
-// 		padding: 1rem
-// 		border-radius: 50%
-// 	&:hover
-// 		background-color: var.$hover-color
+.workspace__list
+	display: flex
+	align-items: center
+	gap: 2rem
+	li
+		p
+			width: var.rem(150px)
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
+		a
+			border: var.$border
+			border-radius: var.rem(8px)
+			height: var.rem(150px)
+			width: var.rem(150px)
+			display: flex
+			justify-content: center
+			align-items: center
+			cursor: pointer
+			background-color: var.$white-color
+			h1
+				font-size: 3rem
+				font-weight: bold
+				background-color: var.$hover-color
+				display: flex
+				justify-content: center
+				align-items: center
+				padding: 1rem
+				height: 60%
+				width: 60%
+				border-radius: 50%
+				color: var.$text-color
+			&:hover
+				background-color: var.$hover-color

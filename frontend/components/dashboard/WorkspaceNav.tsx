@@ -1,16 +1,23 @@
 import Link from "next/link";
+import workspaceStore from "../../store/workspace";
 
 import style from "../../styles/components/dashboard/WorkspaceNav.module.sass";
+import Spinner from "../Spinner";
 
 const WorkspaceNav = (): JSX.Element => {
+  const { workspace }: any = workspaceStore();
+
   return (
     <aside className={style.workspace__bar}>
       <header>
-        <h3>Workspace Name</h3>
+        <h3>
+          {!workspace && <Spinner visible />}
+          {workspace && workspace.name}
+        </h3>
       </header>
       <ul>
         <li>
-          <Link href="/dashboard">
+          <Link href="/workspace">
             <a className={[style.active__link].join(" ")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +35,7 @@ const WorkspaceNav = (): JSX.Element => {
         </li>
 
         <li>
-          <Link href="/dashboard">
+          <Link href="/workspace">
             <a className="active">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

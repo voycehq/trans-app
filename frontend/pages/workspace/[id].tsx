@@ -1,17 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
-import { useState, useEffect } from "react";
-
-import SelectMenu from "../../../components/SelectMenu";
-import Layout from "../../../components/dashboard/Layout";
-import style from "../../../styles/pages/Workspace.module.sass";
+import { useEffect, useState } from "react";
+import workspace from "../../api/workspace";
+import Layout from "../../components/dashboard/Layout";
+import SelectMenu from "../../components/SelectMenu";
+import useApi from "../../libs/useApi";
+import workspaceStore from "../../store/workspace";
+import style from "../../styles/pages/Workspace.module.sass";
 
 const textOption = [
   { value: "english", label: "English" },
   { value: "french", label: "French" },
   { value: "spanish", label: "Spanish" },
 ];
+const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
+  const { request, loading, status, data } = useApi(workspace.getWorkspaceById);
+  const { setWorkspace } = workspaceStore();
 
-const Workspace: NextPage = () => {
   const [state, setState] = useState([{ value: "english", label: "English" }]);
   const [outputText, setOutputText] = useState([
     { value: "french", label: "French" },
@@ -26,6 +31,13 @@ const Workspace: NextPage = () => {
     setOutputText([textOption.filter((ele) => ele.value != state[0].value)[0]]);
   }, [state]);
 
+  useEffect(() => {
+    request(workspaceId);
+  }, []);
+
+  useEffect(() => {
+    if (data && status == 200) setWorkspace(data.data);
+  }, [data]);
   return (
     <Layout>
       <section className={style.body__content}>
@@ -86,4 +98,11 @@ const Workspace: NextPage = () => {
   );
 };
 
-export default Workspace;
+export const getServerSideProps = (context: any) => {
+  return {
+    props: {
+      workspaceId: context.params.id,
+    },
+  };
+};
+export default WorkspaceDetails;

@@ -12,7 +12,7 @@ const filteStyle = {
     outline: "none",
     height: "30px",
     minHeight: "25px",
-    width: "fit-content",
+    width: "100%",
     minWidth: "8rem",
     transition: "unset",
     cursor: "pointer",
@@ -65,17 +65,29 @@ interface Props {
   value: Options[];
   onChange: any;
   id: string;
+  defaultValue?: Options[];
+  palceholder?: string;
+  width?: string;
 }
 
-const SelectMenu = ({ options, value, onChange, id }: Props): JSX.Element => {
+const SelectMenu = ({
+  options,
+  value,
+  defaultValue,
+  onChange,
+  id,
+  palceholder,
+  width = "fit-content",
+}: Props): JSX.Element => {
   return (
-    <div style={{ width: "fit-content" }}>
+    <div style={{ width }}>
       <Select
         instanceId={id}
-        defaultValue={value}
+        defaultValue={defaultValue}
         value={value}
         onChange={onChange}
         styles={filteStyle}
+        isClearable
         theme={(theme) => ({
           ...theme,
           colors: {
@@ -87,6 +99,7 @@ const SelectMenu = ({ options, value, onChange, id }: Props): JSX.Element => {
         options={options}
         isSearchable={false}
         isMulti={false}
+        placeholder={palceholder}
       />
     </div>
   );

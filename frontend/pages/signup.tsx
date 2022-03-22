@@ -51,7 +51,7 @@ const Signup: NextPage = () => {
     if (user) {
       if (!user.is_verified) router.push("/verify");
 
-      if (apiKey && user.is_verified) router.push("/dashboard");
+      if (apiKey && user.is_verified) router.push("/workspace");
       else router.push("/login");
     }
   }, [user]);
