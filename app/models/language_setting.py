@@ -10,7 +10,7 @@ class LanguageSetting(Base_Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 
-    language_id = Column(Integer, nullable=False)
+    language_id = Column(Integer, unique=True, nullable=False)
     voice_language_name = Column(String(50), nullable=False)
     voice_language_code = Column(String(50), nullable=False)
     voice_name = Column(String(50), nullable=False)
