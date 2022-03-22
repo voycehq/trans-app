@@ -1,6 +1,6 @@
 interface Props {
   children: any;
-  className: "danger" | "success" | "warning";
+  className: "danger" | "success" | "warning" | "nothing";
   visible: boolean;
   rest?: any;
 }

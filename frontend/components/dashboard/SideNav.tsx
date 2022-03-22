@@ -22,6 +22,7 @@ const SideNav = (): JSX.Element => {
       <ul>
         {loading && <Spinner visible bgColor="#fff" />}
         {data &&
+          data.data &&
           data.data.map((workspace: any) => {
             let isActive: boolean = false;
             if (currentWorkspace && workspace.id == currentWorkspace.id) {

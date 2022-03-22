@@ -5,7 +5,7 @@ const useApi = (apiFunc: any) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage]: any = useState(null);
-  const [status, setStatus] = useState(null);
+  const [status, setStatus]: any = useState(null);
 
   const resetState = () => {
     setError(false);
@@ -18,6 +18,11 @@ const useApi = (apiFunc: any) => {
   class Private {
     _setError(bool: boolean) {
       setError(bool);
+      return this;
+    }
+
+    _setStatus(num: number) {
+      setStatus(num);
       return this;
     }
 

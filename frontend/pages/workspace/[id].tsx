@@ -33,11 +33,12 @@ const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
 
   useEffect(() => {
     request(workspaceId);
-  }, []);
+  }, [workspaceId]);
 
   useEffect(() => {
     if (data && status == 200) setWorkspace(data.data);
   }, [data]);
+
   return (
     <Layout>
       <section className={style.body__content}>

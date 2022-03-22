@@ -55,12 +55,12 @@ const Verification: NextPage = () => {
     } else router.push("/login");
   }, [user]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      resendCodeApi._private._reset();
-      _private._reset();
-    }, 5000);
-  }, [resendCodeApi.status, status]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     resendCodeApi._private._reset();
+  //     _private._reset();
+  //   }, 5000);
+  // }, [resendCodeApi.status, status]);
 
   return (
     <main className={style.main}>
@@ -70,7 +70,7 @@ const Verification: NextPage = () => {
         </header>
         <form
           className={style.form}
-          style={{ gap: "0rem" }}
+          style={{ gap: ".5rem" }}
           onSubmit={onSubmit}
         >
           <header>
@@ -81,7 +81,7 @@ const Verification: NextPage = () => {
           <div>
             <Alert
               className={status !== 200 ? "danger" : "success"}
-              visible={status == 200}
+              visible={status !== null}
             >
               {message}
             </Alert>
