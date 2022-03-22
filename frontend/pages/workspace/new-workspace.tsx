@@ -44,21 +44,22 @@ const NewWorkspace: NextPage = ({ languages }: any) => {
       setTimeout(() => {
         _private._reset();
       }, 5000);
-      _private._setError(true)._setMessage("Please select a defualt language");
+      _private
+        ._setError(true)
+        ._setStatus(400)
+        ._setMessage("Please select a defualt language");
       return;
     }
     request({
       name: state.name,
       default_language: state.default_language.value,
+    }).then((res) => {
+      router.push("/workspace");
     });
   };
 
   // Hooks
   useEffect(() => inputTextRef.current?.focus(), []);
-
-  useEffect(() => {
-    if (status == 200 && data) console.log(data);
-  }, [data]);
 
   useEffect(() => {
     const user = getUser();
@@ -81,8 +82,11 @@ const NewWorkspace: NextPage = ({ languages }: any) => {
             <header>
               <h3>Create a workspace</h3>
             </header>
-            {error && (
-              <Alert className={error ? "danger" : "success"} visible={error}>
+            {status !== null && (
+              <Alert
+                className={error ? "danger" : "success"}
+                visible={status !== null}
+              >
                 {message}
               </Alert>
             )}
@@ -115,12 +119,12 @@ const NewWorkspace: NextPage = ({ languages }: any) => {
                 {!loading && <span>Create workspace</span>}
               </button>
             </form>
-            {user && (
+            {/* {user && (
               <p style={{ textAlign: "left", marginTop: "4rem" }}>
                 Hi {getUser().full_name.split(" ")[0]}! <br />
                 Waving you greetings
               </p>
-            )}
+            )} */}
           </section>
         </div>
       </main>
@@ -128,12 +132,10 @@ const NewWorkspace: NextPage = ({ languages }: any) => {
   );
 };
 
-export const getStaticProps = async () => {
-  const response: any = await language.fetchLangauges(
-    authStorage.getState().getApiKey()
-  );
+export const getServerSideProps = async () => {
+  const response: any = await (await language.fetchLangauges()).data;
 
-  const languages = response.data.data.map((language: any) => ({
+  const languages = response.data.map((language: any) => ({
     id: language.id,
     label: language.name,
     value: language.code,
