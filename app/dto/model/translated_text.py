@@ -12,6 +12,7 @@ class TranslatedTextDTO(BaseModel):
     reviewed_by: Optional[int]
     reviewed_date: Optional[datetime]
     translated_date: datetime
+    audio_generation_date: datetime
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]

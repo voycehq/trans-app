@@ -18,6 +18,8 @@ class FactoryConfig(BaseSettings):
     MAIL_PORT: int
     MAIL_SERVER: str
     MAIL_FROM_NAME: str
+    
+    GOOGLE_APPLICATION_CREDENTIALS: str
 
     class Config:
         env_file = os.path.join(base_dir, '.env')

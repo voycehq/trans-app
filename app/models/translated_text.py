@@ -15,7 +15,8 @@ class TranslatedText(Base_Model):
     body = Column(Text, nullable=False)
     reviewed_by = Column(Integer, ForeignKey("customer.id", ondelete="NO ACTION"), nullable=True)
     reviewed_date = Column(DateTime, nullable=True)
-    translated_date = Column(DateTime, nullable=False)
+    translated_date = Column(DateTime, nullable=True)
+    audio_generation_date = Column(DateTime, nullable=True)
 
     created_on = Column(DateTime, default=datetime.utcnow())
     updated_on = Column(DateTime, onupdate=datetime.utcnow())
