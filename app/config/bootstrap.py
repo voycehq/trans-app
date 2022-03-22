@@ -3,9 +3,18 @@ class Bootstrap:
         pass
 
     def run(self):
+        import os
+        from config import config
+        
+        # * Seed DB
         self.populate_date_model()
         self.populate_workspace_roles()
         self.populate_languages()
+        
+        # * Setup system environment for Google TTS
+        os.system(
+            "export GOOGLE_APPLICATION_CREDENTIALS={tts_credential_path}".format(
+                tts_credential_path=config.GOOGLE_APPLICATION_CREDENTIALS))
 
     def populate_date_model(self):
         from app.service.model.date import DateLib

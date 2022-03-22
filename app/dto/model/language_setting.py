@@ -6,9 +6,16 @@ from pydantic import BaseModel
 
 class LanguageSettingDTO(BaseModel):
     id: int
-    date_id: int
+    
     language_id: int
-    details: Any
+    voice_language_name: str
+    voice_language_code: str
+    voice_name: str
+    audio_encoding: int
+    audio_pitch: float
+    audio_speaking_rate: float
+    details: Optional[Any]
+    
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
