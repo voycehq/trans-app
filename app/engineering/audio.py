@@ -43,10 +43,7 @@ class AudioGenerator:
     
     @property
     def workspace(self):
-        print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
         workspace_object: Optional[WorkspaceDTO] = WorkspaceLib.find_by(where={'id': self.workspace_id})
-        print(workspace_object)
-        
         if workspace_object:
             self.__workspace = workspace_object
             
@@ -63,6 +60,7 @@ class AudioGenerator:
     def translated_scripts(self):
         translated_script_objects: List[TranslatedTextDTO] = TranslatedTextLib.get_all_by_text_id(text_id=self.raw_text_id)
         self.__translated_scripts = translated_script_objects
+        self.__translated_scripts.append(self.__raw_text)
         return self.__translated_scripts
     
     def __after_init__(self):
@@ -100,7 +98,7 @@ class AudioGenerator:
         from datetime import datetime
         import math
         
-        return f'{target_language_code}-{math.ceil(datetime.timestamp(datetime.now()))}.mp3'
+        return f'{target_language_code}-{math.ceil(datetime.timestamp(datetime.now()))}.wav'
     
     def __save_audio_file__(self, filename: str, tts_response: Any) -> str:
         from pathlib import Path
@@ -190,9 +188,9 @@ class AudioGenerator:
             
             # * 4th: Setup audio configurations
             audio_config = tts.AudioConfig(
-                audio_encoding=language_setting.audio_encoding,
-                speaking_rate=language_setting.audio_speaking_rate,
-                pitch=language_setting.audio_pitch
+                audio_encoding=1,
+                speaking_rate=.97,
+                pitch=0
             )
             
             # * 5th: Get audio generator client
@@ -212,7 +210,7 @@ class AudioGenerator:
             logger.info(f'Successfully generated audio for language_code={language_setting.voice_language_code}')
             
             # * 9th: Update TranslatedText object
-            TranslatedTextLib.update(data={'text_id': script.text_id, 'language_id': script.language_id, 'audio_generation_date': datetime.now() })
+            # TranslatedTextLib.update(data={'text_id': script.text_id, 'language_id': script.language_id, 'audio_generation_date': datetime.now() })
 
             # * 10th: Append audio server link
             audio_server_link = f"/static/{filepath.split('/static/')[-1]}"

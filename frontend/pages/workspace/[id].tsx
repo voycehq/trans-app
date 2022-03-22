@@ -9,7 +9,7 @@ import Layout from "../../components/dashboard/Layout";
 import SelectMenu from "../../components/SelectMenu";
 import Spinner from "../../components/Spinner";
 import useApi from "../../libs/useApi";
-import { colors } from "../../libs/utils";
+import { colors, http } from "../../libs/utils";
 import workspaceStore from "../../store/workspace";
 import style from "../../styles/pages/Workspace.module.sass";
 
@@ -44,6 +44,7 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
     setText({ ...text, [id]: value });
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAudio([]);
 
     const data = {
       workspace_id: workspaceId,
@@ -62,6 +63,7 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
 
   // Audio
   const onGetAudio = () => {
+    setAudio([]);
     const data = {
       raw_text_id: textObject.id,
       workspace_id: workspaceId,
@@ -72,8 +74,8 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
       translation_text_language_id: outputText[0].id,
     };
     audioApi.request(data).then((res) => {
-      console.log(res.data);
-      setAudio(res.data.data);
+      const data = res.data.data.map((audio: any) => `${http}${audio}`);
+      setAudio(data);
     });
   };
 
@@ -98,9 +100,9 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
     if (data && status == 200) setWorkspace(data.data);
   }, [data]);
 
-  useEffect(() => {
-    console.log(audioObject);
-  }, [audioObject]);
+  // useEffect(() => {
+  //   console.log(audioObject);
+  // }, [audioObject]);
 
   return (
     <Layout>

@@ -44,7 +44,7 @@ class LanguageSettingLib:
                 data['id'] = record.id
                 list_to_be_updated.append(data)
 
-        if list_to_be_updated:
-            db.bulk_update_mappings(LanguageSetting, list_to_be_updated)
+        # if list_to_be_updated:
+            # db.bulk_update_mappings(LanguageSetting, list_to_be_updated)
 
         db.flush()

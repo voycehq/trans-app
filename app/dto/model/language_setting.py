@@ -11,7 +11,7 @@ class LanguageSettingDTO(BaseModel):
     voice_language_name: str
     voice_language_code: str
     voice_name: str
-    audio_encoding: int
+    audio_encoding: str
     audio_pitch: float
     audio_speaking_rate: float
     details: Optional[Any]

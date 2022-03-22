@@ -9,3 +9,5 @@ export const colors = {
   grey: "rgba(0, 0, 0, 0.1)",
   border: "1px solid #dadce0",
 };
+
+export const http = "http://localhost:4000";

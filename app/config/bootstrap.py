@@ -13,9 +13,7 @@ class Bootstrap:
         self.populate_language_settings()
         
         # * Setup system environment for Google TTS
-        os.system(
-            "export GOOGLE_APPLICATION_CREDENTIALS={tts_credential_path}".format(
-                tts_credential_path=f'{base_dir}/voyce-google-tts-credentials.json'))
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = f'{base_dir}/voyce-google-tts-credentials.json'
 
     def populate_date_model(self):
         from app.service.model.date import DateLib
@@ -50,25 +48,25 @@ class Bootstrap:
         language_settings = [{'name': 'French',
                                 'voice_language_name': 'French(France)',
                                 'voice_language_code': 'fr-FR',
-                                'voice_name': 'fr-FR-Wavenet-E',
-                                'audio_encoding': '2',
-                                'audio_pitch': 1.6,
-                                'audio_speaking_rate': 0.96
+                                'voice_name': 'fr-FR-Wavenet-D',
+                                'audio_encoding': 1,
+                                'audio_pitch': 1,
+                                'audio_speaking_rate': 0
                             }, {'name': 'Spanish',
                                 'voice_language_name': 'Spanish',
                                 'voice_language_code': 'es-ES',
                                 'voice_gender': 'female',
                                 'voice_name': 'es-ES-Wavenet-C',
-                                'audio_encoding': '2',
+                                'audio_encoding': 1,
                                 'audio_pitch': 1.6,
-                                'audio_speaking_rate': 0.96
+                                'audio_speaking_rate': 0
                             },{'name': 'English',
                                 'voice_language_name': 'English(United States)',
                                 'voice_language_code': 'es-US',
-                                'voice_name': 'en-US-Standard-D',
-                                'audio_encoding': '2',
-                                'audio_pitch': 1.6,
-                                'audio_speaking_rate': 0.96
+                                'voice_name': 'en-US-Wavenet-G',
+                                'audio_encoding': 1,
+                                'audio_pitch': 0,
+                                'audio_speaking_rate': 0.9
                             }]
 
         LanguageSettingLib.bulk_create(records=language_settings)

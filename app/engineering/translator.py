@@ -30,14 +30,14 @@ class Translator:
 
         # * Run after init function for validations
         self.__after_init__()
-    
+
     @property
     def raw_text(self):
         logger.info('Fetching original text from DB')
         raw_text_object: Optional[TextDTO] = TextLib.find_by(where={'id': self.text_id})
         self.__raw_text = raw_text_object if raw_text_object else None
         return self.__raw_text
-    
+
     @property
     def languages(self):
         logger.info('Fetching target language objects from DB')
@@ -45,10 +45,10 @@ class Translator:
 
         for language_id in self.language_ids:
             language = LanguageLib.find_by(where={'id': language_id})
-            
+
             if language:
                 language_objects.append(language)
-        
+
         self.__languages = language_objects
         return self.__languages
 
@@ -90,65 +90,72 @@ class Translator:
             driver = webdriver.Chrome(
                 executable_path=f'{base_dir}/app/engineering/data/chromedriver',
                 options=options)
-        
+
+        driver.maximize_window()
         return driver
 
     def __select_target_language__(self, targetSectionPanel: Any, target_language_id: int) -> None:
         from selenium.common.exceptions import ElementClickInterceptedException
-        
+
         # ** Drop down menu to select target language
         targetSectionPanel.find_element(by=By.XPATH, value="//button[@dl-test='translator-target-lang-btn']").click()
-        
+
         try:
             # * Get target translation language object
             language: LanguageDTO = list(filter(lambda language: language.id == target_language_id, self.languages))[0]
-            
+
             target_language_html_code = language.html_code
             targetSectionPanel.find_element(by=By.CSS_SELECTOR, value='.lmt__textarea_container').find_element(
                 by=By.XPATH, value=f"//div[@dl-test='translator-target-lang-list']").find_element(
-                    by=By.XPATH, value="//button[@dl-test='{id}']".format(id=target_language_html_code)).click()
-        
+                by=By.XPATH, value="//button[@dl-test='{id}']".format(id=target_language_html_code)).click()
+
         except IndexError:
             raise Exception('Target language ID is incorrect.')
-        
+
         except ElementClickInterceptedException:
             logger.info('RETRYING SELECTOR PICKER >>>>>>>>')
             targetSectionPanel.find_element(by=By.CSS_SELECTOR, value='.lmt__textarea_container').find_element(
                 by=By.XPATH, value=f"//div[@dl-test='translator-target-lang-list']").find_element(
-                    by=By.XPATH, value="//button[@dl-test='{id}']".format(id=target_language_html_code)).click()
+                by=By.XPATH, value="//button[@dl-test='{id}']".format(id=target_language_html_code)).click()
 
-    def __inject_raw_script_for_translation__(self, sourceSectionPanel: Any) -> None:
+    def __inject_raw_script_for_translation__(self, driver: webdriver) -> None:
         # ** Input raw text to be translated
-        sourceSectionPanel.find_element(by=By.XPATH, value="//textarea[@dl-test='translator-source-input']").send_keys(f"""{self.raw_text.body}""")
+        driver.find_element(by=By.ID, value='panelTranslateText').find_element(by=By.XPATH,
+                                                                               value="//textarea[@dl-test='translator-source-input']").send_keys(
+            f"""{self.raw_text.body}""")
 
     def __translate_script__(self, target_language: LanguageDTO) -> Optional[Dict[str, Any]]:
-        import datetime
-        
+        import datetime, time
+
         try:
             # ** Configure selenium Chrome driver
             logger.info('Configuring webdriver for web scrapping')
             driver = self.__configure_chrome_driver__()
             driver.get(config.TRANSLATOR_URL)
-            
+
             # ** Get root containers
             logger.info(f'Start script translation for target_laguage_code={target_language.code}')
             translationPanel = driver.find_element(by=By.ID, value='panelTranslateText')
-            sourceSectionPanel = translationPanel.find_element(by=By.XPATH, value="//section[@dl-test='translator-source']")
-            targetSectionPanel = translationPanel.find_element(by=By.XPATH, value="//section[@dl-test='translator-target']")
-            
+            sourceSectionPanel = translationPanel.find_element(by=By.XPATH,
+                                                               value="//section[@dl-test='translator-source']")
+            targetSectionPanel = translationPanel.find_element(by=By.XPATH,
+                                                               value="//section[@dl-test='translator-target']")
+
             # ** Select target language
-            self.__select_target_language__(targetSectionPanel=targetSectionPanel, target_language_id=target_language.id)
-            
+            self.__select_target_language__(targetSectionPanel=targetSectionPanel,
+                                            target_language_id=target_language.id)
+
             # ** Input raw text for translation
-            self.__inject_raw_script_for_translation__(sourceSectionPanel=sourceSectionPanel)
-            
+            self.__inject_raw_script_for_translation__(driver=driver)
+
             # ** Get translated script once it's ready
             translatedScript = ''
             while len(translatedScript.strip()) == 0:
-                translatedScript = targetSectionPanel.find_element(by=By.ID, value='target-dummydiv').get_attribute('innerHTML')
+                translatedScript = targetSectionPanel.find_element(by=By.ID, value='target-dummydiv').get_attribute(
+                    'innerHTML')
             else:
                 logger.info(f'Done with script translation with target_language_code={target_language.code}')
-                
+
                 # ** Build response
                 response_body = {
                     'text_id': self.raw_text.id,
@@ -156,7 +163,7 @@ class Translator:
                     'body': translatedScript,
                     'translated_date': datetime.datetime.now(),
                 }
-                
+
                 return response_body
         except Exception as e:
             logger.error(f'Error occured when translating script with target_lang_code={target_language.code}: {e}')
@@ -166,7 +173,7 @@ class Translator:
     def translate(self) -> List[TranslatedTextDTO]:
         try:
             translatedScripts: List[TranslatedTextDTO] = []
-            
+
             # ** Loop through the various target languages and translate script
             for language in self.languages:
                 # * 1st: Translate script
@@ -174,13 +181,13 @@ class Translator:
 
                 # * 2nd: Append translated script
                 if translatedScript: translatedScripts.append(translatedScript)
-            
+
             # ** Bulk save the transalated scripts
             TranslatedTextLib.bulk_save(payload=translatedScripts)
-            
+
             # ** Fetch all translated scripts for the given text
             response = TranslatedTextLib.get_all_by_text_id(text_id=self.raw_text.id)
-            
+
             # ** Return response
             return response
         except Exception as e:
