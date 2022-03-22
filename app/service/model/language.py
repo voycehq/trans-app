@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from typing import List
 
 from app.dto.model.language import LanguageDTO, LanguageDTOs
 from app.utils.session import session_hook
@@ -51,3 +52,10 @@ class LanguageLib:
             record.__setattr__(key, value)
         db.flush()
         return LanguageDTO.from_orm(record)
+
+    @staticmethod
+    @session_hook
+    def get_all(db: Session) -> List[LanguageDTO]:
+        from app.models.language import Language
+        records = db.query(Language).all()
+        return LanguageDTOs.from_orm(records).__root__

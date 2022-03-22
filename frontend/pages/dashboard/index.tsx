@@ -1,126 +1,88 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import workspace from "../../api/workspace";
-import Alert from "../../components/Alert";
+import { useState, useEffect } from "react";
 
-import { InputText } from "../../components/Inputs";
-import Logo from "../../components/Logo";
 import SelectMenu from "../../components/SelectMenu";
-import Spinner from "../../components/Spinner";
-import useApi from "../../libs/useApi";
-import authStorage from "../../store";
-import style from "../../styles/pages/Dashboard.module.sass";
+import Layout from "../../components/dashboard/Layout";
+import style from "../../styles/pages/Workspace.module.sass";
 
-const languageOption = [
+const textOption = [
   { value: "english", label: "English" },
   { value: "french", label: "French" },
   { value: "spanish", label: "Spanish" },
 ];
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  const inputTextRef = useRef<HTMLInputElement>(null);
-  const [state, setState]: any = useState({
-    name: "",
-    default_language: null,
-  });
-  const { setUser, user, apiKey, getUser } = authStorage();
-  const { request, loading, error, message, status, data, _private } = useApi(
-    workspace.newWorkspace
-  );
-
-  const handleOnChange = ({ target: { value } }: any) =>
-    setState({ ...state, name: value });
-
-  const onLanguageChange = (arr: any) => {
-    if (!arr) return setState({ ...state, default_language: arr });
-    if (state.default_language && state.default_language.value == arr.value)
-      return;
-
-    setState({ ...state, default_language: arr });
+  const [state, setState] = useState([{ value: "english", label: "English" }]);
+  const [outputText, setOutputText] = useState([
+    { value: "french", label: "French" },
+  ]);
+  const handleSelectChange = (arr: any) => setState([arr]);
+  const onOutputChange = (arr: any) => {
+    if (state[0].value == arr.value) return;
+    setOutputText([arr]);
   };
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (state.default_language == null) {
-      setTimeout(() => {
-        _private._reset();
-      }, 5000);
-      _private._setError(true)._setMessage("Please select a defualt language");
-      return;
-    }
-    request({
-      name: state.name,
-      default_language: state.default_language.value,
-    });
-  };
-
-  // Hooks
-  useEffect(() => inputTextRef.current?.focus(), []);
-
   useEffect(() => {
-    if (status == 200 && data) console.log(data);
-  }, [data]);
-
-  useEffect(() => {
-    const user = getUser();
-    if (!user || !apiKey) router.push("/login");
-  }, [user]);
+    setOutputText([textOption.filter((ele) => ele.value != state[0].value)[0]]);
+  }, [state]);
 
   return (
-    <main className={style.dashboard}>
-      <div className={style.wrapper}>
+    <Layout>
+      <section className={style.body__content}>
         <header>
-          <Logo />
-          <p>
-            A Voyce workspace is made up of teams, where members can communicate
-            and work together. <br /> When you join a workspace, you&apos;ll be
-            able to collaborate on that workspace.
-          </p>
-        </header>
-        <section className={style.workspace}>
-          <header>
-            <h3>Create a workspace</h3>
-          </header>
-          {error && (
-            <Alert className={error ? "danger" : "success"} visible={error}>
-              {message}
-            </Alert>
-          )}
-          <form onSubmit={onSubmit}>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}
+          <div>
+            <SelectMenu
+              id="text"
+              onChange={handleSelectChange}
+              options={textOption}
+              value={state}
+            />
+          </div>
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              fill="#64676c"
             >
-              <InputText
-                label="New workspace"
-                id="name"
-                value={state.name}
-                inputRef={inputTextRef}
-                onChange={handleOnChange}
-              />
-              <SelectMenu
-                id="translated_text"
-                palceholder="Select default langue"
-                onChange={onLanguageChange}
-                options={languageOption}
-                value={[state.default_language]}
-                width="100%"
-              />
-            </div>
-            <button type={loading ? "button" : "submit"}>
-              {loading && <Spinner visible bgColor="#fff" />}
-              {!loading && <span>Sign in</span>}
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z" />
+            </svg>
+          </span>
+          <div>
+            <SelectMenu
+              id="translated_text"
+              onChange={onOutputChange}
+              options={textOption}
+              value={outputText}
+            />
+          </div>
+        </header>
+        <main>
+          <textarea
+            placeholder="Type to translate"
+            name="original"
+            id="text"
+          ></textarea>
+          <div>
+            <button title="Translate" type="button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="18px"
+                viewBox="0 0 24 24"
+                width="18px"
+                fill="#64676c"
+              >
+                <path d="M21 4H11l-1-3H3c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h8l1 3h9c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM7 16c-2.76 0-5-2.24-5-5s2.24-5 5-5c1.35 0 2.48.5 3.35 1.3L9.03 8.57c-.38-.36-1.04-.78-2.03-.78-1.74 0-3.15 1.44-3.15 3.21S5.26 14.21 7 14.21c2.01 0 2.84-1.44 2.92-2.41H7v-1.71h4.68c.07.31.12.61.12 1.02C11.8 13.97 9.89 16 7 16zm6.17-5.42h3.7c-.43 1.25-1.11 2.43-2.05 3.47-.31-.35-.6-.72-.86-1.1l-.79-2.37zm8.33 9.92c0 .55-.45 1-1 1H14l2-2.5-1.04-3.1 3.1 3.1.92-.92-3.3-3.25.02-.02c1.13-1.25 1.93-2.69 2.4-4.22H20v-1.3h-4.53V8h-1.29v1.29h-1.44L11.46 5.5h9.04c.55 0 1 .45 1 1v14z" />
+                <path d="M0 0h24v24H0zm0 0h24v24H0z" fill="none" />
+              </svg>
             </button>
-          </form>
-          <p style={{ textAlign: "left", marginTop: "4rem" }}>
-            Hi Raymon! <br />
-            Welcome to your dashboard.
-          </p>
-        </section>
-      </div>
-    </main>
+          </div>
+          <textarea name="translated_text" id="translated_text"></textarea>
+        </main>
+      </section>
+    </Layout>
   );
 };
 

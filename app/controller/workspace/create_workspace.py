@@ -20,7 +20,7 @@ def create_workspace(data: CreateWorkspaceDTO = Body(...)):
     from fastapi import status
 
     # check default language if exist
-    language = LanguageLib.find_by(where={"name": data.default_language})
+    language = LanguageLib.find_by(where={"code": data.default_language})
     if not language:
         return SuccessResponse(data=None).set_message("language not available for now"). \
             set_status_code(status.HTTP_400_BAD_REQUEST).response()
@@ -43,5 +43,4 @@ def create_workspace(data: CreateWorkspaceDTO = Body(...)):
                                     "workspace_role_id": workspace_role.id}
                               )
 
-    return SuccessResponse(data={"workspace": workspace}
-                           ).set_message("workspace created").response()
+    return SuccessResponse(data=workspace).set_message("workspace created").response()
