@@ -20,6 +20,12 @@ const Layout = ({
         {sideNav && <SideNav />}
         {workspaceNav && <WorkspaceNav />}
         <section className={style.body__content}>{children}</section>
+        <div className={style.audio__container}>
+          <audio controls>
+            <source src="hey.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </main>
     </main>
   );
