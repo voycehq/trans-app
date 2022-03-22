@@ -6,7 +6,7 @@ router = APIRouter(prefix="/api/v1/auth", tags=['Auth'])
 
 
 @router.post("/reset-password")
-async def forgot_code(data: ResetPasswordDTO = Body(...)):
+async def reset_password(data: ResetPasswordDTO = Body(...)):
     from app.service.model.customer import CustomerLib
     from app.config.success_response import SuccessResponse
     from fastapi import status

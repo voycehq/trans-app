@@ -10,7 +10,7 @@ class TextDTO(BaseModel):
     title: str
     body: Text
     customer_id: int
-    reviewed_by: int
+    reviewed_by: Optional[int]
     workspace: int
     date_id: int
     reviewed_date: Optional[datetime]

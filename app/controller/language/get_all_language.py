@@ -6,7 +6,7 @@ router = APIRouter(tags=["Language"])
 
 
 @router.get('/api/v1/language/get-all-language')
-def create_workspace():
+def get_all_languages():
     from app.service.model.language import LanguageLib
     from app.config.success_response import SuccessResponse
 

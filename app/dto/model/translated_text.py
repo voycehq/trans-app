@@ -9,7 +9,7 @@ class TranslatedTextDTO(BaseModel):
     text_id: int
     language_id: int
     body: Text
-    reviewed_by: int
+    reviewed_by: Optional[int]
     reviewed_date: Optional[datetime]
     translated_date: datetime
     created_on: datetime

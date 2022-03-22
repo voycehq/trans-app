@@ -12,7 +12,8 @@ from app.service.model.translated_text import TranslatedTextLib
 from config import base_dir
 from config import config
 
-class TranslateScript:
+
+class Translator:
     """
     This class is an automated script that receives an english script
     and returns the translated script in the specified target_lang_code.
@@ -24,7 +25,7 @@ class TranslateScript:
         self.language_ids: List[int] = language_ids
 
         # * Constants
-        self.__raw_text: str = ''
+        self.__raw_text: Optional[TextDTO] = None
         self.__languages: List[LanguageDTO] = []
 
         # * Run after init function for validations
@@ -34,7 +35,7 @@ class TranslateScript:
     def raw_text(self):
         logger.info('Fetching original text from DB')
         raw_text_object: Optional[TextDTO] = TextLib.find_by(where={'id': self.text_id})
-        self.__raw_text = raw_text_object.body if raw_text_object else ''
+        self.__raw_text = raw_text_object if raw_text_object else None
         return self.__raw_text
     
     @property
@@ -65,7 +66,7 @@ class TranslateScript:
 
     def __validate_original_text__(self) -> None:
         # ** 1st: validate to ensure that length is not > 5000 characters
-        if (len(self.raw_text) > 5000):
+        if (len(self.raw_text.body) > 5000):
             raise Exception('Original script length should not excede 5000 characters')
 
     def __validate_target_languages__(self) -> None:
@@ -118,7 +119,7 @@ class TranslateScript:
 
     def __inject_raw_script_for_translation__(self, sourceSectionPanel: Any) -> None:
         # ** Input raw text to be translated
-        sourceSectionPanel.find_element(by=By.XPATH, value="//textarea[@dl-test='translator-source-input']").send_keys(f"""{self.raw_text}""")
+        sourceSectionPanel.find_element(by=By.XPATH, value="//textarea[@dl-test='translator-source-input']").send_keys(f"""{self.raw_text.body}""")
 
     def __translate_script__(self, target_language: LanguageDTO) -> Optional[Dict[str, Any]]:
         import datetime

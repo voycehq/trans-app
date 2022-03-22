@@ -44,6 +44,7 @@ def create_app():
     from app.controller.language import get_all_language
     from app.controller.workspace import get_user_workspace
     from app.controller.workspace import get_workspace_by_id
+    from app.controller.translation import one_to_one
 
     main_app.include_router(signup.router)
     main_app.include_router(email_verification.router)
@@ -55,6 +56,7 @@ def create_app():
     main_app.include_router(get_all_language.router)
     main_app.include_router(get_user_workspace.router)
     main_app.include_router(get_workspace_by_id.router)
+    main_app.include_router(one_to_one.router)
 
     # Override Validation Error
     from fastapi.exceptions import RequestValidationError
