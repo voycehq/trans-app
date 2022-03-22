@@ -8,7 +8,7 @@ class WorkspaceDetailDTO(BaseModel):
     id: int
     workspace_id: int
     customer_id: int
-    workspace_role_id:int
+    workspace_role_id: int
     created_on: datetime
     updated_on: Optional[datetime]
     deleted_on: Optional[datetime]
