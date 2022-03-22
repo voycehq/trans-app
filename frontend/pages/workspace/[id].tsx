@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
+import language from "../../api/language";
 import workspace from "../../api/workspace";
 import Layout from "../../components/dashboard/Layout";
 import SelectMenu from "../../components/SelectMenu";
@@ -8,18 +9,13 @@ import useApi from "../../libs/useApi";
 import workspaceStore from "../../store/workspace";
 import style from "../../styles/pages/Workspace.module.sass";
 
-const textOption = [
-  { value: "english", label: "English" },
-  { value: "french", label: "French" },
-  { value: "spanish", label: "Spanish" },
-];
-const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
+const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
   const { request, loading, status, data } = useApi(workspace.getWorkspaceById);
   const { setWorkspace } = workspaceStore();
 
-  const [state, setState] = useState([{ value: "english", label: "English" }]);
+  const [state, setState] = useState([{ value: "en", label: "English" }]);
   const [outputText, setOutputText] = useState([
-    { value: "french", label: "French" },
+    { value: "fr", label: "French" },
   ]);
   const handleSelectChange = (arr: any) => setState([arr]);
   const onOutputChange = (arr: any) => {
@@ -28,11 +24,20 @@ const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
   };
 
   useEffect(() => {
-    setOutputText([textOption.filter((ele) => ele.value != state[0].value)[0]]);
+    setOutputText([
+      languages.filter((ele: any) => ele.value != state[0].value)[0],
+    ]);
   }, [state]);
 
   useEffect(() => {
-    request(workspaceId);
+    request(workspaceId).then((res) => {
+      const data: any = res.data.data;
+      const defaultLanguage = languages.filter(
+        (lang: any) => lang.id == data.default_language
+      );
+
+      setState(defaultLanguage);
+    });
   }, [workspaceId]);
 
   useEffect(() => {
@@ -47,8 +52,9 @@ const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
             <SelectMenu
               id="text"
               onChange={handleSelectChange}
-              options={textOption}
+              options={languages}
               value={state}
+              isClearable={false}
             />
           </div>
           <span>
@@ -67,8 +73,9 @@ const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
             <SelectMenu
               id="translated_text"
               onChange={onOutputChange}
-              options={textOption}
+              options={languages}
               value={outputText}
+              isClearable={false}
             />
           </div>
         </header>
@@ -99,10 +106,23 @@ const WorkspaceDetails: NextPage = ({ workspaceId }: any) => {
   );
 };
 
-export const getServerSideProps = (context: any) => {
+export const getServerSideProps = async (context: any) => {
+  const response: any = await (await language.fetchLangauges()).data;
+  const languages = response.data.map((language: any) => {
+    return {
+      id: language.id,
+      label: language.name,
+      value: language.code,
+      html_code: language.html_code,
+      created_on: language.created_on,
+      updated_on: language.updated_on,
+      deleted_on: language.deleted_on,
+    };
+  });
   return {
     props: {
       workspaceId: context.params.id,
+      languages,
     },
   };
 };

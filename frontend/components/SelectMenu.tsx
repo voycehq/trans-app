@@ -68,6 +68,7 @@ interface Props {
   defaultValue?: Options[];
   palceholder?: string;
   width?: string;
+  isClearable?: boolean;
 }
 
 const SelectMenu = ({
@@ -78,6 +79,7 @@ const SelectMenu = ({
   id,
   palceholder,
   width = "fit-content",
+  isClearable = true,
 }: Props): JSX.Element => {
   return (
     <div style={{ width }}>
@@ -87,7 +89,7 @@ const SelectMenu = ({
         value={value}
         onChange={onChange}
         styles={filteStyle}
-        isClearable
+        isClearable={isClearable}
         theme={(theme) => ({
           ...theme,
           colors: {
