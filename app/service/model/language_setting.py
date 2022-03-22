@@ -2,6 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.dto.model.language_setting import LanguageSettingDTO, LanguageSettingDTOs
+from app.service.model.language import LanguageLib
 from app.utils.session import session_hook
 
 
@@ -29,10 +30,18 @@ class LanguageSettingLib:
         list_to_be_updated: list = []
 
         for data in records:
+            language = LanguageLib.find_by(where={"name": data.get("name")})
+
+            data["language_id"] = language.id
+            del data["name"]
+
             try:
                 db.bulk_insert_mappings(LanguageSetting, [data])
             except IntegrityError:
                 db.rollback()
+                record = LanguageSettingLib.find_by(where={"voice_language_name": data.get("voice_language_name")})
+
+                data['id'] = record.id
                 list_to_be_updated.append(data)
 
         if list_to_be_updated:

@@ -10,6 +10,7 @@ class Bootstrap:
         self.populate_date_model()
         self.populate_workspace_roles()
         self.populate_languages()
+        self.populate_language_settings()
         
         # * Setup system environment for Google TTS
         os.system(
@@ -28,7 +29,7 @@ class Bootstrap:
         roles = [{"name": "admin"}, {"name": "reviewer"}]
         WorkspaceRoleLib.bulk_create(names=roles)
 
-        logger.info(f"Done Creating customer roles")
+        logger.info(f"Done Creating workspace roles")
 
     def populate_languages(self):
         from app.service.model.language import LanguageLib
@@ -40,4 +41,35 @@ class Bootstrap:
 
         LanguageLib.bulk_create(records=languages)
 
-        logger.info(f"Done Creating customer Languages")
+        logger.info(f"Done Creating Languages")
+
+    def populate_language_settings(self):
+        from app.service.model.language_setting import LanguageSettingLib
+        from app.logs import logger
+
+        language_settings = [{'name': 'French',
+                                'voice_language_name': 'French(France)',
+                                'voice_language_code': 'fr-FR',
+                                'voice_name': 'fr-FR-Wavenet-E',
+                                'audio_encoding': '2',
+                                'audio_pitch': 1.6,
+                                'audio_speaking_rate': 0.96
+                            }, {'name': 'Spanish',
+                                'voice_language_name': 'Spanish',
+                                'voice_language_code': 'es-ES',
+                                'voice_gender': 'female',
+                                'voice_name': 'es-ES-Wavenet-C',
+                                'audio_encoding': '2',
+                                'audio_pitch': 1.6,
+                                'audio_speaking_rate': 0.96
+                            },{'name': 'English',
+                                'voice_language_name': 'English(United States)',
+                                'voice_language_code': 'es-US',
+                                'voice_name': 'en-US-Standard-D',
+                                'audio_encoding': '2',
+                                'audio_pitch': 1.6,
+                                'audio_speaking_rate': 0.96
+                            }]
+
+        LanguageSettingLib.bulk_create(records=language_settings)
+        logger.info(f"Done Creating Language Settings")
