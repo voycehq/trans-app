@@ -5,9 +5,11 @@ const workspaceStore = create((set: any, get: any) => ({
   workspace: null,
   text: null,
   translatedText: null,
+  audio: [],
 
   // func
   setText: (text: any) => set((state: any) => ({ ...state, text })),
+  setAudio: (audio: any) => set((state: any) => ({ ...state, audio })),
   setTranlatedText: (text: any) =>
     set((state: any) => ({ ...state, translatedText: text })),
 

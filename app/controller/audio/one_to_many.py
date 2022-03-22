@@ -16,6 +16,7 @@ def one_to_many_in_audio(data: OneToManyDTO = Body(...)):
     # from app.engineering.translator import Translator
     from app.config.success_response import SuccessResponse
     from app.engineering.audio import AudioGenerator
+    from app.service.model.translated_text import TranslatedTextLib
 
     # check if workspace id exist
     workspace = WorkspaceLib.find_by(where={"id": data.workspace_id}, get_all=False)
@@ -36,15 +37,22 @@ def one_to_many_in_audio(data: OneToManyDTO = Body(...)):
 
     # Update text record
     text_data: dict = {
-        "id": data.text_id,
+        "id": data.raw_text_id,
         "language_id": raw_text_language.id,
         "body": data.raw_text,
         "customer_id": customer.id,
         "workspace": data.workspace_id,
     }
     text_record = TextLib.update(data=text_data)
-    AudioGenerator(workspace_id=data.workspace_id, raw_text_id=data.raw_text_id)
+    translated_text_data = {
+        "id": data.translation_text_id,
+        "text_id": text_record.id,
+        "body": data.translation_text,
+        "language_id": data.translation_text_language_id,
+    }
+    TranslatedTextLib.update(data=translated_text_data)
+    links = AudioGenerator(workspace_id=data.workspace_id, raw_text_id=data.raw_text_id).generate()
 
     # translation = Translator(text_record.id, [translation_text_language.id]).translate()
 
-    return SuccessResponse(data=translation).response()
+    return SuccessResponse(data=links).response()

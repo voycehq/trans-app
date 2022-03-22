@@ -22,6 +22,8 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
     setTextAndTransText,
     text: textObject,
     translatedText,
+    setAudio,
+    audio: audioObject,
   }: any = workspaceStore();
   const [text, setText] = useState({
     raw_text: "",
@@ -69,6 +71,10 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
       translation_text: translatedText.body,
       translation_text_language_id: outputText[0].id,
     };
+    audioApi.request(data).then((res) => {
+      console.log(res.data);
+      setAudio(res.data.data);
+    });
   };
 
   useEffect(() => {
@@ -91,6 +97,10 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
   useEffect(() => {
     if (data && status == 200) setWorkspace(data.data);
   }, [data]);
+
+  useEffect(() => {
+    console.log(audioObject);
+  }, [audioObject]);
 
   return (
     <Layout>
@@ -128,8 +138,10 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
           </div>
 
           {!translationApi.loading && translatedText && (
-            <button onClick={onGetAudio}>
-              {/* <Spinner visible bgColor={colors.white_color} /> */}
+            <button disabled={audioApi.loading} onClick={onGetAudio}>
+              {audioApi.loading && (
+                <Spinner visible bgColor={colors.white_color} />
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="17px"

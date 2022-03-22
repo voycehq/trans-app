@@ -42,8 +42,7 @@ class TranslatedTextLib:
     def update(db: Session, data: dict) -> TranslatedTextDTO:
         from app.models.translated_text import TranslatedText
 
-        record = db.query(TranslatedText).filter_by(text_id=data.get("text_id"),
-                                               language_id=data.get("language_id")).first()
+        record = db.query(TranslatedText).filter_by(id=data.get("id")).first()
 
         for key, value in data.items():
             record.__setattr__(key, value)

@@ -43,7 +43,9 @@ class AudioGenerator:
     
     @property
     def workspace(self):
+        print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
         workspace_object: Optional[WorkspaceDTO] = WorkspaceLib.find_by(where={'id': self.workspace_id})
+        print(workspace_object)
         
         if workspace_object:
             self.__workspace = workspace_object
@@ -65,15 +67,15 @@ class AudioGenerator:
     
     def __after_init__(self):
         # ** 1st: Validate workspace
-        if not self.__workspace or self.__workspace is None:
+        if not self.workspace or self.workspace is None:
             raise Exception(f'Workspace with workspace_id={self.workspace_id} is not found.')
         
         # ** 1st: Validate text if it exists
-        if not self.__raw_text or self.__raw_text is None:
+        if not self.raw_text or self.raw_text is None:
             raise Exception('Original script not found')
         
         # ** 1st: Validate translation scripts are available
-        if not self.__translated_scripts or self.__translated_scripts:
+        if not self.translated_scripts:
             raise Exception('No translated script found')
     
     def __resolve_customer_folder__(self) -> str:
@@ -167,9 +169,9 @@ class AudioGenerator:
         # ** Loop through the translated text to generate audio
         for script in self.translated_scripts:
             # ** Ensure script has been reviewed
-            if not script.reviewed_by or script.reviewed_by is None:
-                logger.warn(f'The script with translated_text_id={script.id} has not yet being reviewed.')
-                continue
+            # if not script.reviewed_by or script.reviewed_by is None:
+            #     logger.warn(f'The script with translated_text_id={script.id} has not yet being reviewed.')
+            #     continue
             
             # * 1st: Get language setting
             language_setting: Optional[LanguageSettingDTO] = LanguageSettingLib.find_by(where={'language_id': script.language_id})
