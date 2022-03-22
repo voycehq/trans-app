@@ -14,6 +14,22 @@
 			display: flex
 			justify-content: center
 			align-items: center
+		button
+			@include var.smallButtonStyle()
+			display: flex
+			justify-content: space-between
+			align-items: center
+			white-space: nowrap
+			column-gap: .5rem
+			margin-left: 2rem
+			position: relative
+			&::before
+				content: ""
+				height: 100%
+				width: 2px
+				background-color: var.$border-color
+				position: absolute
+				left: -1.5rem
 
 	form
 		padding: 1rem 0 0

@@ -14,6 +14,7 @@ from app.service.model.translated_text import TranslatedTextLib
 from app.service.model.workspace import WorkspaceLib
 from config import base_dir
 
+
 class AudioGenerator:
     """
     This class is responsible for generating audio files

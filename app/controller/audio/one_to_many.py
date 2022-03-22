@@ -1,20 +1,21 @@
 from fastapi import APIRouter, Depends, Body
 
 from app.config.authorization import Authorization
-from app.dto.controller.translation import OneToOneDTO
+from app.dto.controller.audio import OneToManyDTO
 
-router = APIRouter(dependencies=[Depends(Authorization.authenticate)], tags=["Translator"])
+router = APIRouter(dependencies=[Depends(Authorization.authenticate)], tags=["Audio"])
 
 
-@router.post('/api/v1/translation/one-to-one')
-def one_to_one_translation(data: OneToOneDTO = Body(...)):
+@router.post('/api/v1/audio/one-to-many')
+def one_to_many_in_audio(data: OneToManyDTO = Body(...)):
     from fastapi import status
     from app.service.model.text import TextLib
     from app.dto.model.customer import CustomerDTO
     from app.service.model.language import LanguageLib
     from app.service.model.workspace import WorkspaceLib
-    from app.engineering.translator import Translator
+    # from app.engineering.translator import Translator
     from app.config.success_response import SuccessResponse
+    from app.engineering.audio import AudioGenerator
 
     # check if workspace id exist
     workspace = WorkspaceLib.find_by(where={"id": data.workspace_id}, get_all=False)
@@ -33,15 +34,17 @@ def one_to_one_translation(data: OneToOneDTO = Body(...)):
 
     customer: CustomerDTO = Authorization.get_customer()
 
-    # save data to db
+    # Update text record
     text_data: dict = {
+        "id": data.text_id,
         "language_id": raw_text_language.id,
-        "title": "Example",
         "body": data.raw_text,
         "customer_id": customer.id,
         "workspace": data.workspace_id,
     }
-    text_record = TextLib.create(data=text_data)
-    translation = Translator(text_record.id, [translation_text_language.id]).translate()
+    text_record = TextLib.update(data=text_data)
+    AudioGenerator(workspace_id=data.workspace_id, raw_text_id=data.raw_text_id)
 
-    return SuccessResponse(data={"translation": translation, "text": text_record}).response()
+    # translation = Translator(text_record.id, [translation_text_language.id]).translate()
+
+    return SuccessResponse(data=translation).response()

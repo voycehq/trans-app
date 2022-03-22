@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextPage } from "next";
 import { FormEvent, useEffect, useState } from "react";
+import audio from "../../api/audio";
 import language from "../../api/language";
 import translation from "../../api/translation";
 import workspace from "../../api/workspace";
@@ -15,7 +16,13 @@ import style from "../../styles/pages/Workspace.module.sass";
 const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
   const translationApi = useApi(translation.oneToone);
   const { request, status, data } = useApi(workspace.getWorkspaceById);
-  const { setWorkspace } = workspaceStore();
+  const audioApi = useApi(audio.oneToMany);
+  const {
+    setWorkspace,
+    setTextAndTransText,
+    text: textObject,
+    translatedText,
+  }: any = workspaceStore();
   const [text, setText] = useState({
     raw_text: "",
     translation_text: "",
@@ -45,8 +52,23 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
 
     // Translate user input
     translationApi.request(data).then((res: any) => {
-      setText({ ...text, translation_text: res.data.data[0].body });
+      const data = res.data.data;
+      setTextAndTransText(data.text, data.translation[0]);
+      setText({ ...text, translation_text: data.translation[0].body });
     });
+  };
+
+  // Audio
+  const onGetAudio = () => {
+    const data = {
+      raw_text_id: textObject.id,
+      workspace_id: workspaceId,
+      raw_text: text.raw_text,
+      raw_text_language_id: state[0].id,
+      translation_text_id: translatedText.id,
+      translation_text: translatedText.body,
+      translation_text_language_id: outputText[0].id,
+    };
   };
 
   useEffect(() => {
@@ -104,7 +126,25 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
               isClearable={false}
             />
           </div>
+
+          {!translationApi.loading && translatedText && (
+            <button onClick={onGetAudio}>
+              {/* <Spinner visible bgColor={colors.white_color} /> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="17px"
+                viewBox="0 0 24 24"
+                width="17px"
+                fill="#FFFFFF"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M7 18h2V6H7v12zm4 4h2V2h-2v20zm-8-8h2v-4H3v4zm12 4h2V6h-2v12zm4-8v4h2v-4h-2z" />
+              </svg>
+              <span>Generate audio</span>
+            </button>
+          )}
         </header>
+
         <form onSubmit={onSubmit}>
           <textarea
             placeholder="Type to translate"
@@ -142,6 +182,7 @@ const WorkspaceDetails: NextPage = ({ workspaceId, languages }: any) => {
             id="translation_text"
             value={text.translation_text}
             onChange={onChange}
+            readOnly
           ></textarea>
         </form>
       </section>

@@ -7,6 +7,17 @@ from app.utils.session import session_hook
 class TextLib:
     @staticmethod
     @session_hook
+    def update(db: Session, data: dict) -> TextDTO:
+        from app.models.text import OriginalText
+
+        record = db.query(OriginalText).filter_by(id=data.get("id")).first()
+        for key, value in data.items():
+            record.__setattr__(key, value)
+        db.flush()
+        return TextDTO.from_orm(record)
+
+    @staticmethod
+    @session_hook
     def create(db: Session, data: dict) -> TextDTO:
         from app.models.text import OriginalText
         from app.service.model.date import DateLib
