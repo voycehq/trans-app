@@ -41,6 +41,7 @@ jobs:
             cd /root/trans-app/frontend
             npm install
             npm audit fix
+            
             npm run build
             
             # Restart application
