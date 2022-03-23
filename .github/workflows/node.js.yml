@@ -1,14 +1,13 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
 
 jobs:
   deploy:
@@ -16,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
-      - name: executing remote ssh commands using ssh key
+      - name: Compelling Voyce Production
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST_TEST }}
@@ -24,26 +23,25 @@ jobs:
           key: ${{ secrets.SSH_SECRET }}
           script: |
             cd /root/trans-app
-            
+
             git fetch
             git reset --hard origin/develop
-            
+
             # Activate virtual env
             source venv/bin/activate
-            
+
             # Install dependencies
             pip install -r requirements.txt
-            
+
             # Migrate Database
             source venv/bin/activate && alembic revision --autogenerate && alembic upgrade head 
-            
+
             # Setup frontend
             cd /root/trans-app/frontend
             npm install
             npm audit fix
-            
+
             npm run build
-            
+
             # Restart application
             pm2 reload all
-            
