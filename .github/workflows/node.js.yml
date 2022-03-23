@@ -11,7 +11,34 @@ on:
 
 jobs:
   deploy:
-    name: Production
+    name: Frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Compelling Voyce Production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_TEST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_SECRET }}
+          script: |
+            cd /root/trans-app
+
+            git fetch
+            git reset --hard origin/develop
+
+            # Setup frontend
+            cd /root/trans-app/frontend
+            npm install
+            npm audit fix
+
+            npm run build
+
+            # Restart application
+            pm2 reload ui
+
+  deploy:
+    name: Server
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
@@ -36,12 +63,5 @@ jobs:
             # Migrate Database
             source venv/bin/activate && alembic revision --autogenerate && alembic upgrade head 
 
-            # Setup frontend
-            cd /root/trans-app/frontend
-            npm install
-            npm audit fix
-
-            npm run build
-
             # Restart application
-            pm2 reload all
+            pm2 reload api
