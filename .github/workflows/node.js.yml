@@ -37,7 +37,7 @@ jobs:
             # Restart application
             pm2 reload ui
 
-  deploy:
+  build:
     name: Server
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
