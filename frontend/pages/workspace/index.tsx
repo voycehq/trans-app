@@ -155,10 +155,8 @@ const Workspace: NextPage = ({ languages }: any) => {
   );
 };
 
-export const getStaticProps = async () => {
-  const response: any = await language.fetchLangauges(
-    authStorage.getState().getApiKey()
-  );
+export const getServerSideProps = async () => {
+  const response: any = await language.fetchLangauges();
 
   const languages = response.data.data.map((language: any) => ({
     id: language.id,

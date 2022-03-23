@@ -27,7 +27,7 @@ interface InputProps {
   onChange?: any;
   id: string;
   value: string;
-  autoComplete?: boolean;
+  autoComplete?: "on" | "off";
 }
 export const InputText = ({
   label,

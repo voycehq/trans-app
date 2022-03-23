@@ -6,7 +6,7 @@ interface Props {
 const Logo = ({ to }: Props) => (
   <Link href={to ? to : "/"}>
     <a style={{ color: "black" }}>
-      <h1>Voyce</h1>
+      <h1>ROR-Voyce</h1>
     </a>
   </Link>
 );
