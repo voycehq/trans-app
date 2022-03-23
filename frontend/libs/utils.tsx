@@ -10,4 +10,7 @@ export const colors = {
   border: "1px solid #dadce0",
 };
 
-export const http = "http://localhost:4000";
+export const http =
+  process.env.NODE_ENV === "production"
+    ? "https://api.voyce.rimscloud.co"
+    : "http://localhost:4000";
