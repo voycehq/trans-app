@@ -10,3 +10,7 @@ SQLAlchemy==1.4.32
 starlette_context==0.3.3
 uvicorn==0.17.6
 webdriver_manager==3.5.4
+google-api-core==2.7.1
+google-auth==2.6.2
+google-cloud-texttospeech==2.11.0
+googleapis-common-protos==1.56.0

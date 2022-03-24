@@ -1,3 +1,5 @@
+from pyvirtualdisplay import Display
+
 from typing import Any, Dict, List, Optional
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -75,23 +77,17 @@ class Translator:
             raise Exception('None of desired target languages for transalation are supported yet.')
 
     def __configure_chrome_driver__(self) -> webdriver:
-        from selenium.webdriver.chrome.service import Service
-        from webdriver_manager.chrome import ChromeDriverManager
-        from selenium.webdriver.chrome.options import Options
+        from pyvirtualdisplay import Display
+        from selenium import webdriver
 
-        try:
-            options = Options()
-            options.add_argument("--headless")
-            options.add_argument("--window-size=1920x1080")
-            driver = webdriver.Chrome(
-                service=Service(ChromeDriverManager().install()),
-                options=options)
-        except Exception:
-            driver = webdriver.Chrome(
-                executable_path=f'{base_dir}/app/engineering/data/chromedriver',
-                options=options)
+        display = Display(visible=0, size=(800, 600))
+        display.start()
 
-        driver.maximize_window()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        options.add_argument("--headless")
+        options.add_argument("--window-size=1920x1080")
+        driver = webdriver.Chrome(chrome_options=options)
         return driver
 
     def __select_target_language__(self, targetSectionPanel: Any, target_language_id: int) -> None:
