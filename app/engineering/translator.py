@@ -1,5 +1,3 @@
-from pyvirtualdisplay import Display
-
 from typing import Any, Dict, List, Optional
 from selenium import webdriver
 from selenium.webdriver.common.by import By
